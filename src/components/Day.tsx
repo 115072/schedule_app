@@ -1,11 +1,12 @@
 import React from "react";
-import DayEntry from "./DayEntry";
+import "./Day.css";
+// import DayEntry from "./DayEntry";
 
-const Day = () => {
+const Day = ({ dayNo }) => {
   return (
-    <div>
-      Day
-      <DayEntry></DayEntry>
+    <div className="day-cont">
+      <a>{dayNo}</a>
+      <div className="day-prog-bar"></div>
     </div>
   );
 };

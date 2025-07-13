@@ -1,0 +1,14 @@
+h2 {
+  text-align: center;
+}
+
+.month-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.month-header > a {
+  cursor: pointer;
+}

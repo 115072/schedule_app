@@ -1,0 +1,10 @@
+.day-cont {
+  display: grid;
+  grid-template-columns: 2rem auto;
+  padding: 0.5rem;
+}
+
+.day-prog-bar {
+  border: 2px black solid;
+  width: fill;
+}
