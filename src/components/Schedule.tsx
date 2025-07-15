@@ -1,4 +1,3 @@
-import React from "react";
 import Month from "./Month";
 import Timeline from "./Timeline";
 import Days from "./Days";

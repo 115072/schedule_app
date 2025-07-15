@@ -1,8 +1,10 @@
-import React from "react";
 import "./Day.css";
-// import DayEntry from "./DayEntry";
 
-const Day = ({ dayNo }) => {
+type DayProps = {
+  dayNo: number;
+};
+
+const Day = ({ dayNo }: DayProps) => {
   return (
     <div className="day-cont">
       <a>{dayNo}</a>

@@ -1,12 +1,5 @@
-import React from "react";
-import Day from "./Day";
-
 const Days = () => {
-  return (
-    <div>
-      <Day></Day>
-    </div>
-  );
+  return <div></div>;
 };
 
 export default Days;

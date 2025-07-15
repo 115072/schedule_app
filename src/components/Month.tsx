@@ -3,7 +3,7 @@ import Day from "./Day";
 import "./Month.css";
 
 const Month = () => {
-  const daysInMonths = [
+  const daysInMonths: [string, number][] = [
     ["January", 31],
     ["February", 28],
     ["March", 31],
