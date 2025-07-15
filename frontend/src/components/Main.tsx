@@ -1,11 +1,11 @@
-import Schedule from "./Schedule";
-import Tags from "./Tags";
+import Tags from "./tags_filter/Tags";
+import MonthView from "./month_overview/MonthView";
 
 const Main = () => {
   return (
     <main>
       This is the main bruv
-      <Schedule></Schedule>
+      <MonthView></MonthView>
       <Tags></Tags>
     </main>
   );

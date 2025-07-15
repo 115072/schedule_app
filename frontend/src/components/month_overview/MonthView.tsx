@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Day from "./Day";
-import "./Month.css";
+import DayBar from "./DayBar.tsx";
+import "./MonthView.css";
 
-const Month = () => {
+const MonthView = () => {
   const daysInMonths: [string, number][] = [
     ["January", 31],
     ["February", 28],
@@ -36,10 +36,10 @@ const Month = () => {
         <a onClick={nextMonth}>next</a>
       </div>
       {Array.from({ length: daysInMonths[currMonth][1] }, (_, i) => (
-        <Day dayNo={i + 1}></Day>
+        <DayBar dayNo={i + 1}></DayBar>
       ))}
     </div>
   );
 };
 
-export default Month;
+export default MonthView;

@@ -1,10 +1,10 @@
-import "./Day.css";
+import "./DayBar.css";
 
 type DayProps = {
   dayNo: number;
 };
 
-const Day = ({ dayNo }: DayProps) => {
+const DayBar = ({ dayNo }: DayProps) => {
   return (
     <div className="day-cont">
       <a>{dayNo}</a>
@@ -13,4 +13,4 @@ const Day = ({ dayNo }: DayProps) => {
   );
 };
 
-export default Day;
+export default DayBar;
