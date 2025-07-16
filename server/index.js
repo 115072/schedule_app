@@ -15,9 +15,15 @@ const pool = new Pool({
   port: 5432,
 });
 
+// GET all rows from test table
 app.get("/api/test", async (req, res) => {
-  const result = await pool.query("SELECT NOW()");
-  res.json({ time: result.rows[0].now });
+  try {
+    const result = await pool.query("SELECT * FROM test");
+    res.json(result.rows); // returns array of rows
+  } catch (err) {
+    console.error("Error querying DB:", err);
+    res.status(500).json({ error: "Database query failed" });
+  }
 });
 
 app.listen(4000, () => {
