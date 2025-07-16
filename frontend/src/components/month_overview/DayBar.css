@@ -7,4 +7,5 @@
 .day-prog-bar {
   border: 2px black solid;
   width: fill;
+  cursor: pointer;
 }

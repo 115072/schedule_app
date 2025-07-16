@@ -1,14 +1,16 @@
+import { useSelectedDayContext, type DayData } from "../../SelectedDayContext";
 import "./DayBar.css";
 
-type DayProps = {
-  dayNo: number;
-};
+const DayBar = ({ day, month }: DayData) => {
+  const { setter: setSelDay } = useSelectedDayContext();
 
-const DayBar = ({ dayNo }: DayProps) => {
   return (
     <div className="day-cont">
-      <a>{dayNo}</a>
-      <div className="day-prog-bar"></div>
+      <a>{day}</a>
+      <div
+        className="day-prog-bar"
+        onClick={() => setSelDay({ day, month })}
+      ></div>
     </div>
   );
 };

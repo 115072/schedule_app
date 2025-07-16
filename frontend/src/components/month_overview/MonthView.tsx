@@ -36,7 +36,7 @@ const MonthView = () => {
         <a onClick={nextMonth}>next</a>
       </div>
       {Array.from({ length: daysInMonths[currMonth][1] }, (_, i) => (
-        <DayBar dayNo={i + 1}></DayBar>
+        <DayBar day={i + 1} month={daysInMonths[currMonth][0]}></DayBar>
       ))}
     </div>
   );
