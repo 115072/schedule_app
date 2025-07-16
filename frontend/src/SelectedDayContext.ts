@@ -2,7 +2,7 @@ import {createContext,useContext, type Dispatch, type SetStateAction} from "reac
 
 export interface IDayData {
   day: number
-  month: string
+  month: number
 }
 
 export type TDayData = IDayData|null
