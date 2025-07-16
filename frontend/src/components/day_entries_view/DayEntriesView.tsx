@@ -6,13 +6,14 @@ interface Props {
 }
 
 const DayEntriesView = ({ active }: Props) => {
-  const { data: selDay } = useSelectedDayContext();
+  const { data: selDay, setter: setSelDay } = useSelectedDayContext();
 
-  if (!active) return;
+  if (!active || selDay === null) return;
   return (
     <div className="day-entries-cont">
-      <p>Day: {selDay.day}</p>
-      <p>Month: {selDay.month}</p>
+      <button onClick={() => setSelDay(null)}>CLOSE</button>
+      <p>Day: {selDay?.day}</p>
+      <p>Month: {selDay?.month}</p>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, officia
         ut, dolores reiciendis doloribus soluta minima porro maxime suscipit

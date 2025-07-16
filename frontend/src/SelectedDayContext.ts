@@ -1,13 +1,15 @@
 import {createContext,useContext, type Dispatch, type SetStateAction} from "react";
 
-export interface DayData {
+export interface IDayData {
   day: number
   month: string
 }
 
+export type TDayData = IDayData|null
+
 export interface DayDataContext {
-  data: DayData,
-  setter: Dispatch<SetStateAction<DayData>>
+  data: TDayData,
+  setter: Dispatch<SetStateAction<TDayData>>
 }
 
 export const SelectedDayContext = createContext<DayDataContext | undefined>(undefined);

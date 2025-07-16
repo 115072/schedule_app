@@ -1,7 +1,7 @@
-import { useSelectedDayContext, type DayData } from "../../SelectedDayContext";
+import { useSelectedDayContext, type IDayData } from "../../SelectedDayContext";
 import "./DayBar.css";
 
-const DayBar = ({ day, month }: DayData) => {
+const DayBar = ({ day, month }: IDayData) => {
   const { setter: setSelDay } = useSelectedDayContext();
 
   return (

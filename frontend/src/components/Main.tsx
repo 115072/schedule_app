@@ -2,14 +2,11 @@ import Tags from "./tags_filter/Tags";
 import MonthView from "./month_overview/MonthView";
 import DayEntriesView from "./day_entries_view/DayEntriesView";
 import "./Main.css";
-import { SelectedDayContext, type DayData } from "../SelectedDayContext";
+import { SelectedDayContext, type TDayData } from "../SelectedDayContext";
 import { useState } from "react";
 
 const Main = () => {
-  const [selDay, setSelDay] = useState<DayData>({
-    day: 1,
-    month: "January",
-  });
+  const [selDay, setSelDay] = useState<TDayData>(null);
 
   return (
     <div className="main-content">
