@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { SelectedDayContext, type TDayData } from "@utils/SelectedDayContext";
-import "@styles/App.css";
+import { SelectedDayContext, type TDayData } from "@/utils/SelectedDayContext";
+import "@/styles/App.css";
 
-import Header from "@components/Header";
-import Footer from "@components/Footer";
-import MonthView from "@components/month_overview/MonthView";
-import Tags from "@components/tags_filter/Tags";
-import DayEntriesView from "@components/day_entries_view/DayEntriesView";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import MonthView from "@/components/month_overview/MonthView";
+import Tags from "@/components/tags_filter/Tags";
+import DayEntriesView from "@/components/day_entries_view/DayEntriesView";
 
 function App() {
   const [selDay, setSelDay] = useState<TDayData>(null);

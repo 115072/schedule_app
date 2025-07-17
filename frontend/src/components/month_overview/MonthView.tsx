@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { getMonthName, getMonthDays } from "@utils/translateMonthNum";
-import "@styles/MonthView.css";
+import { getMonthName, getMonthDays } from "@/utils/translateMonthNum";
+import "@/styles/MonthView.css";
 
-import DayBar from "@components/month_overview/DayBar";
+import DayBar from "@/components/month_overview/DayBar";
 
 const MonthView = () => {
   const [currMonth, setCurrMonth] = useState(1);

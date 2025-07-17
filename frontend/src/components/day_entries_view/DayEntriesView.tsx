@@ -1,6 +1,6 @@
-import { useSelectedDayContext } from "@utils/SelectedDayContext";
-import { getMonthName } from "@utils/translateMonthNum";
-import "@styles/DayEntriesView.css";
+import { useSelectedDayContext } from "@/utils/SelectedDayContext";
+import { getMonthName } from "@/utils/translateMonthNum";
+import "@/styles/DayEntriesView.css";
 
 interface Props {
   active: boolean;
