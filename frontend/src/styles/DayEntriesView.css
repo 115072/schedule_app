@@ -1,5 +1,12 @@
 .day-entries-cont {
   width: 30vw;
   height: auto;
-  background: #b5b5b5;
+  /* background: #b5b5b5; */
+}
+
+.entries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
 }

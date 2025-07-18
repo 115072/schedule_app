@@ -1,0 +1,9 @@
+.event-entry-cont {
+  border: black 2px solid;
+  padding: 1rem;
+}
+
+.event-entry-desc {
+  font-size: 18px;
+  margin-bottom: 0.5rem;
+}
