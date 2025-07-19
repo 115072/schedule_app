@@ -4,15 +4,17 @@ FROM node:18
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install *all* dependencies (including devDependencies)
 RUN npm install
 
-# Copy rest of the server files
+# Copy the rest of your backend source files
 COPY . .
 
 # Expose backend port
 EXPOSE 4000
 
-# Start the backend
-CMD ["node", "server.js"]
+# Start in dev mode with nodemon
+CMD ["npm", "run", "dev"]

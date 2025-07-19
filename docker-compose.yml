@@ -24,6 +24,8 @@ services:
       DB_PASS: passw
       DB_NAME: postgres
       DB_HOST: postgres
+    volumes:
+      - ./backend:/app
 
   frontend:
     build:

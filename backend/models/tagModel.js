@@ -2,7 +2,7 @@ import db from "../db.js";
 
 export async function getAllTags() {
   const result = await db.query("SELECT * FROM tag");
-  return result.rows;
+  return "szopd ki";
 }
 
 export async function getTagById(id) {
