@@ -1,3 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: oklch(97.8% 0.018 166.28);
+  --color-brand-100: oklch(95.94% 0.037 164.04);
+  --color-brand-200: oklch(91.54% 0.078 162.64);
+  --color-brand-300: oklch(87.78% 0.112 161.12);
+  --color-brand-400: oklch(84.19% 0.147 159.02);
+  --color-brand-500: oklch(81.52% 0.173 156.48);
+  --color-brand-600: oklch(74.44% 0.181 154.07);
+  --color-brand-700: oklch(60.78% 0.146 154.44);
+  --color-brand-800: oklch(45.09% 0.105 155.3);
+  --color-brand-900: oklch(29.26% 0.062 157.05);
+  --color-brand-950: oklch(19.9% 0.039 158.34);
+}
