@@ -16,15 +16,21 @@ const MonthView = () => {
   }
 
   return (
-    <div>
-      <div className="month-header">
-        <a onClick={prevMonth}>prev</a>
-        <h2>{getMonthName(currMonth)}</h2>
-        <a onClick={nextMonth}>next</a>
+    <div className="mx-4 max-h-[80vh] overflow-scroll">
+      <div className="grid grid-cols-3 sticky top-0 bg-neutral-300 dark:bg-neutral-900 h-10 items-center text-center">
+        <a onClick={prevMonth} className="text-4xl cursor-pointer select-none">
+          {"<"}
+        </a>
+        <h2 className="text-2xl">{getMonthName(currMonth)}</h2>
+        <a onClick={nextMonth} className="text-4xl cursor-pointer select-none">
+          {">"}
+        </a>
       </div>
-      {Array.from({ length: getMonthDays(currMonth) }, (_, i) => (
-        <DayBar day={i + 1} month={currMonth} key={i}></DayBar>
-      ))}
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: getMonthDays(currMonth) }, (_, i) => (
+          <DayBar day={i + 1} month={currMonth} key={i}></DayBar>
+        ))}
+      </div>
     </div>
   );
 };

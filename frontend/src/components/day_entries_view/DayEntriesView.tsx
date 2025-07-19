@@ -1,5 +1,5 @@
 import { useSelectedDayContext } from "@/utils/SelectedDayContext";
-import { getMonthName } from "@/utils/translateMonthNum";
+import { getMonthName, getOrdinal } from "@/utils/translateMonthNum";
 import "@/styles/DayEntriesView.css";
 import type { Event } from "@/utils/types";
 import EventEntry from "./EventEntry";
@@ -20,14 +20,22 @@ const DayEntriesView = ({ active }: Props) => {
 
   if (!active || selDay === null) return;
   return (
-    <div className="day-entries-cont">
-      <button onClick={() => setSelDay(null)}>CLOSE</button>
-      <p>Day: {selDay?.day}</p>
-      <p>Month: {getMonthName(selDay?.month)}</p>
-      <div className="entries-list">
-        <EventEntry event={exampleData}></EventEntry>
-        <EventEntry event={exampleData}></EventEntry>
-        <EventEntry event={exampleData}></EventEntry>
+    <div className="w-[30vw] px-4 max-h-[80vh] overflow-scroll">
+      <div className="flex flex-row sticky top-0 bg-neutral-300 dark:bg-neutral-900 justify-between items-center pb-4">
+        <button
+          onClick={() => setSelDay(null)}
+          className="text-6xl cursor-pointer select-none"
+        >
+          {">"}
+        </button>
+        <span className="text-3xl font-bold">
+          {getOrdinal(selDay?.day)} {getMonthName(selDay?.month)}
+        </span>
+      </div>
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: selDay.day }, () => (
+          <EventEntry event={exampleData}></EventEntry>
+        ))}
       </div>
     </div>
   );

@@ -14,17 +14,17 @@ function App() {
   return (
     <>
       <Header></Header>
-      <div className="main-content">
+      <div className="flex flex-row min-w-screen">
         <SelectedDayContext.Provider
           value={{
             data: selDay,
             setter: setSelDay,
           }}
         >
-          <main>
+          <div className="w-full">
             <Tags></Tags>
             <MonthView></MonthView>
-          </main>
+          </div>
           <DayEntriesView active={true}></DayEntriesView>
         </SelectedDayContext.Provider>
       </div>

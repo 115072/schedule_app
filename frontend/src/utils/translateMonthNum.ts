@@ -23,3 +23,11 @@ export const getMonthDays = (monthNum: number):number => {
   if (monthNum < 1 || monthNum > 12) throw new Error("Invalid month number");
   return daysInMonths[monthNum-1][1]
 }
+
+export function getOrdinal(n: number): string {
+  const suffixes = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  const suffix = (v >= 11 && v <= 13) ? "th" :
+                 suffixes[(v % 10)] || "th";
+  return `${n}${suffix}`;
+}
