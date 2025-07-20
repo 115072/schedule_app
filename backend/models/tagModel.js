@@ -2,7 +2,7 @@ import db from "../db.js";
 
 export async function getAllTags() {
   const result = await db.query("SELECT * FROM tag");
-  return "szopd ki";
+  return result.rows;
 }
 
 export async function getTagById(id) {
@@ -10,7 +10,15 @@ export async function getTagById(id) {
   return result.rows;
 }
 
-export async function postTag() {}
+export async function makeTag(tag) {
+  const { name, hexcolor, parenttag } = tag;
+
+  const result = await db.query(
+    "INSERT INTO tag (name, hexcolor, parenttag) VALUES ($1,$2,$3) RETURNING * ",
+    [name, hexcolor, parenttag]
+  );
+  return result.rows[0];
+}
 
 export async function updateTagById() {}
 
