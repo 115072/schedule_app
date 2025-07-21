@@ -5,3 +5,9 @@ export interface Event {
   description: string,
   tags: string[]
 }
+
+export interface EventTag {
+  name: string,
+  color: string,
+  subtags?: EventTag[]
+}

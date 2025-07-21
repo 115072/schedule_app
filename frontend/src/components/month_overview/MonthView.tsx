@@ -15,7 +15,7 @@ const MonthView = () => {
   }
 
   return (
-    <div className="mx-4 max-h-[80vh] overflow-scroll">
+    <div className="mx-4 overflow-scroll">
       <div className="grid grid-cols-3 sticky top-0 bg-neutral-300 dark:bg-neutral-900 h-10 items-center text-center">
         <a onClick={prevMonth} className="text-4xl cursor-pointer select-none">
           {"<"}

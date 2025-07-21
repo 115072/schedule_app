@@ -4,8 +4,8 @@ import { SelectedDayContext, type TDayData } from "@/utils/SelectedDayContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MonthView from "@/components/month_overview/MonthView";
-import Tags from "@/components/tags_filter/Tags";
 import DayEntriesView from "@/components/day_entries_view/DayEntriesView";
+import TagsList from "@/components/tags_filter/TagsList";
 
 function App() {
   const [selDay, setSelDay] = useState<TDayData>(null);
@@ -21,7 +21,7 @@ function App() {
           }}
         >
           <div className="w-full">
-            <Tags></Tags>
+            <TagsList></TagsList>
             <MonthView></MonthView>
           </div>
           <DayEntriesView active={true}></DayEntriesView>
