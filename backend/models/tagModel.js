@@ -20,6 +20,14 @@ export async function makeTag(tag) {
   return result.rows[0];
 }
 
-export async function updateTagById() {}
+export async function updateTagById(tag) {
+  const { id, name, hexcolor, parenttag } = tag;
+
+  const result = await db.query(
+    "UPDATE tag SET name = $1, hexcolor = $2, parenttag = $3 WHERE id = $4 RETURNING * ",
+    [name, hexcolor, parenttag, id]
+  );
+  return result.rows[0];
+}
 
 export async function removeTagById() {}
