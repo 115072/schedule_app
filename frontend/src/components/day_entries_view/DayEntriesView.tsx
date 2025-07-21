@@ -1,6 +1,5 @@
 import { useSelectedDayContext } from "@/utils/SelectedDayContext";
 import { getMonthName, getOrdinal } from "@/utils/translateMonthNum";
-import "@/styles/DayEntriesView.css";
 import type { Event } from "@/utils/types";
 import EventEntry from "./EventEntry";
 
@@ -26,7 +25,7 @@ const DayEntriesView = ({ active }: Props) => {
           onClick={() => setSelDay(null)}
           className="text-6xl cursor-pointer select-none"
         >
-          {">"}
+          x
         </button>
         <span className="text-3xl font-bold">
           {getOrdinal(selDay?.day)} {getMonthName(selDay?.month)}

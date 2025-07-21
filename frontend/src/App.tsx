@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { SelectedDayContext, type TDayData } from "@/utils/SelectedDayContext";
-import "@/styles/App.css";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";

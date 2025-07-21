@@ -1,7 +1,5 @@
 import { type Event } from "@/utils/types";
 
-import "@/styles/EventEntry.css";
-
 const EventEntry = ({ event }: { event: Event }) => {
   return (
     <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">

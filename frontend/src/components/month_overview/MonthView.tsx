@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { getMonthName, getMonthDays } from "@/utils/translateMonthNum";
-import "@/styles/MonthView.css";
 
 import DayBar from "@/components/month_overview/DayBar";
 
