@@ -30,4 +30,7 @@ export async function updateTagById(tag) {
   return result.rows[0];
 }
 
-export async function removeTagById() {}
+export async function removeTagById(id) {
+  await db.query("DELETE FROM tag WHERE id = $1", [id]);
+  return "The tag and its children tags are deleted";
+}

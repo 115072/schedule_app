@@ -3,6 +3,7 @@ import {
   getTagById,
   makeTag,
   updateTagById,
+  removeTagById,
 } from "../models/tagModel.js";
 
 export async function fetchAllTags(req, res) {
@@ -41,6 +42,16 @@ export async function putTagById(req, res) {
     res.json(tags);
   } catch (error) {
     console.error("Error updating tag:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function deleteTagById(req, res) {
+  try {
+    const tags = await removeTagById(req.params.id);
+    res.json(tags);
+  } catch (error) {
+    console.error("Error deleting tag:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
