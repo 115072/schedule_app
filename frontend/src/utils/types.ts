@@ -1,9 +1,9 @@
 
 export interface Event {
-  startTime: Date,
+  startTimestamp: number,
   durationMin: number,
   description: string,
-  tags: string[]
+  tags?: EventTag[]
 }
 
 export interface EventTag {

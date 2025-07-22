@@ -33,25 +33,25 @@ const TagsList = () => {
       color: "#4db6ac",
     },
     {
-      name: "Tag 1",
+      name: "Tag 3",
       color: "#f06292",
       subtags: [
         {
-          name: "Tag 1.1",
+          name: "Tag 3.1",
           color: "#7986cb",
         },
         {
-          name: "Tag 1.2",
+          name: "Tag 3.2",
           color: "#aed581",
           subtags: [
             {
-              name: "Tag 1.2.1",
+              name: "Tag 3.2.1",
               color: "#ff8a65",
             },
           ],
         },
         {
-          name: "Tag 1.3",
+          name: "Tag 3.3",
           color: "#4fc3f7",
         },
       ],

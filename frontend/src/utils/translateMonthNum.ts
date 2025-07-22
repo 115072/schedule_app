@@ -14,14 +14,14 @@ const daysInMonths: [string, number][] = [
   ];
 
 export const getMonthName = (monthNum: number):string => {
-  if (monthNum < 1 || monthNum > 12) throw new Error("Invalid month number");
-  return daysInMonths[monthNum-1][0]
+  if (monthNum < 0 || monthNum > 11) throw new Error("Invalid month number");
+  return daysInMonths[monthNum][0]
 }
 
 
 export const getMonthDays = (monthNum: number):number => {
-  if (monthNum < 1 || monthNum > 12) throw new Error("Invalid month number");
-  return daysInMonths[monthNum-1][1]
+  if (monthNum < 0 || monthNum > 11) throw new Error("Invalid month number");
+  return daysInMonths[monthNum][1]
 }
 
 export function getOrdinal(n: number): string {

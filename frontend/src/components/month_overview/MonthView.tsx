@@ -4,14 +4,14 @@ import { getMonthName, getMonthDays } from "@/utils/translateMonthNum";
 import DayBar from "@/components/month_overview/DayBar";
 
 const MonthView = () => {
-  const [currMonth, setCurrMonth] = useState(1);
+  const [currMonth, setCurrMonth] = useState(0);
 
   function prevMonth() {
-    setCurrMonth(currMonth == 1 ? 12 : currMonth - 1);
+    setCurrMonth(currMonth === 0 ? 11 : currMonth - 1);
   }
 
   function nextMonth() {
-    setCurrMonth(currMonth == 12 ? 1 : currMonth + 1);
+    setCurrMonth(currMonth === 11 ? 0 : currMonth + 1);
   }
 
   return (
@@ -27,7 +27,7 @@ const MonthView = () => {
       </div>
       <div className="flex flex-col gap-2">
         {Array.from({ length: getMonthDays(currMonth) }, (_, i) => (
-          <DayBar day={i + 1} month={currMonth} key={i}></DayBar>
+          <DayBar date={new Date(2025, currMonth, i + 2)} key={i}></DayBar>
         ))}
       </div>
     </div>
