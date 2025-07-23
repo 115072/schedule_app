@@ -1,4 +1,9 @@
-import { getAllUsers, getUserById, makeUser } from "../models/userModel.js";
+import {
+  getAllUsers,
+  getUserById,
+  makeUser,
+  updateUserById,
+} from "../models/userModel.js";
 
 export async function fetchAllUsers(req, res) {
   try {
@@ -26,6 +31,16 @@ export async function postUser(req, res) {
     res.json(users);
   } catch (error) {
     console.error("Error posting user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function putUserById(req, res) {
+  try {
+    const users = await updateUserById({ id: req.params.id, ...req.body });
+    res.json(users);
+  } catch (error) {
+    console.error("Error updating user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
