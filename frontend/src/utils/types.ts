@@ -1,3 +1,4 @@
+import type { EventTag } from "@/store/tagsSlice";
 
 export interface Event {
   startTimestamp: number,
@@ -6,8 +7,3 @@ export interface Event {
   tags?: EventTag[]
 }
 
-export interface EventTag {
-  name: string,
-  color: string,
-  subtags?: EventTag[]
-}

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import selDayReducer from "@/store/selectedDaySlice";
+import tagsReducer from "@/store/tagsSlice"
 
 export const store = configureStore({
   reducer: {
-    selDay: selDayReducer
+    selDay: selDayReducer,
+    tags: tagsReducer
   }
 })
 
