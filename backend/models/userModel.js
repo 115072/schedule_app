@@ -29,3 +29,8 @@ export async function updateUserById(user) {
   );
   return result.rows[0];
 }
+
+export async function removeUserById(id) {
+  await db.query("DELETE FROM users WHERE id = $1", [id]);
+  return "The user is deleted";
+}

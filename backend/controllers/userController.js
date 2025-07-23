@@ -3,6 +3,7 @@ import {
   getUserById,
   makeUser,
   updateUserById,
+  removeUserById,
 } from "../models/userModel.js";
 
 export async function fetchAllUsers(req, res) {
@@ -41,6 +42,16 @@ export async function putUserById(req, res) {
     res.json(users);
   } catch (error) {
     console.error("Error updating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function deleteUserById(req, res) {
+  try {
+    const users = await removeUserById(req.params.id);
+    res.json(users);
+  } catch (error) {
+    console.error("Error deleting user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
