@@ -29,3 +29,8 @@ export async function updateEventById(event) {
   );
   return result.rows[0];
 }
+
+export async function removeEventById(id) {
+  await db.query("DELETE FROM evententry WHERE id = $1", [id]);
+  return "The event is deleted";
+}

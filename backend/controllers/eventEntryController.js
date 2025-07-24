@@ -3,6 +3,7 @@ import {
   getEventById,
   makeEvent,
   updateEventById,
+  removeEventById,
 } from "../models/eventEntryModel.js";
 
 export async function fetchAllEvents(req, res) {
@@ -41,6 +42,16 @@ export async function putEventById(req, res) {
     res.json(event);
   } catch (error) {
     console.error("Error updating event:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function deleteEventById(req, res) {
+  try {
+    const event = await removeEventById(req.params.id);
+    res.json(event);
+  } catch (error) {
+    console.error("Error deleting event:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
