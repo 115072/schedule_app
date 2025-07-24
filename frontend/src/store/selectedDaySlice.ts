@@ -18,7 +18,7 @@ function fetchDayEvents(date: Date):Event[] {
   // Example data for testing
   const arr: Event[] = []
   for (let i = 0; i < date.getUTCDate(); i++) {
-    arr.push({startTimestamp: Date.now(), durationMin: 123, description: "Lorem ipsum dolor sit amet", tags: []})
+    arr.push({startTimestamp: Date.now(), durationMin: 123, description: "Lorem ipsum dolor sit amet"})
   }
   return arr;
 }
