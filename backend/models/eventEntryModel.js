@@ -19,3 +19,13 @@ export async function makeEvent(event) {
   );
   return result.rows[0];
 }
+
+export async function updateEventById(event) {
+  const { id, description, start, duration, day, tag, users } = event;
+
+  const result = await db.query(
+    "UPDATE evententry SET description = $1, start = $2, duration = $3, day = $4, tag = $5, users = $6 WHERE id = $7 RETURNING * ",
+    [description, start, duration, day, tag, users, id]
+  );
+  return result.rows[0];
+}

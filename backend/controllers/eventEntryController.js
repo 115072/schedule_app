@@ -2,6 +2,7 @@ import {
   getAllEvents,
   getEventById,
   makeEvent,
+  updateEventById,
 } from "../models/eventEntryModel.js";
 
 export async function fetchAllEvents(req, res) {
@@ -30,6 +31,16 @@ export async function postEvent(req, res) {
     res.json(event);
   } catch (error) {
     console.error("Error posting event:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function putEventById(req, res) {
+  try {
+    const event = await updateEventById({ id: req.params.id, ...req.body });
+    res.json(event);
+  } catch (error) {
+    console.error("Error updating event:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
