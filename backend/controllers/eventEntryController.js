@@ -1,11 +1,21 @@
-import { getAllEvents } from "../models/eventEntryModel.js";
+import { getAllEvents, getEventById } from "../models/eventEntryModel.js";
 
 export async function fetchAllEvents(req, res) {
   try {
-    const users = await getAllEvents();
-    res.json(users);
+    const events = await getAllEvents();
+    res.json(events);
   } catch (error) {
     console.error("Error fetching events:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function fetchEventById(req, res) {
+  try {
+    const event = await getEventById(req.params.id);
+    res.json(event);
+  } catch (error) {
+    console.error("Error fetching event:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
