@@ -8,12 +8,12 @@ function App() {
   return (
     <>
       <Header></Header>
-      <div className="flex flex-row min-w-screen">
+      <div className="flex flex-row min-w-screen pt-24">
         <div className="w-full">
           <TagsList></TagsList>
           <MonthView></MonthView>
         </div>
-        <DayEntriesView active={true}></DayEntriesView>
+        <DayEntriesView></DayEntriesView>
       </div>
       <Footer></Footer>
     </>

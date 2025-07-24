@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { getMonthName, getMonthDays } from "@/utils/translateMonthNum";
+import { getMonthName } from "@/utils/translateMonthNum";
 
 import DayBar from "@/components/month_overview/DayBar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetch, selectDays } from "@/store/daysSlice";
+import { fetchMonth, selectDays } from "@/store/daysSlice";
 
 const MonthView = () => {
-  const [currMonth, setCurrMonth] = useState(0);
+  const [currMonth, setCurrMonth] = useState(new Date().getUTCMonth());
   const dispatch = useAppDispatch();
   const days = useAppSelector(selectDays);
 
   useEffect(() => {
-    dispatch(fetch(currMonth));
+    dispatch(fetchMonth(currMonth));
   }, [currMonth, dispatch]);
 
   function prevMonth() {
@@ -34,12 +34,8 @@ const MonthView = () => {
         </a>
       </div>
       <div className="flex flex-col gap-2">
-        {Array.from({ length: getMonthDays(currMonth) }, (_, i) => (
-          <DayBar
-            day={days[i]}
-            date={new Date(2025, currMonth, i + 2)}
-            key={i}
-          ></DayBar>
+        {days.days.map((_, i) => (
+          <DayBar day={days.days[i]} key={i}></DayBar>
         ))}
       </div>
     </div>

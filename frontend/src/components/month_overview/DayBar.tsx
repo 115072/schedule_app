@@ -1,6 +1,5 @@
-import type { DayEvents } from "@/store/daysSlice";
+import { setSelDay, type DayEvents } from "@/store/daysSlice";
 import { useAppDispatch } from "@/store/hooks";
-import { set } from "@/store/selectedDaySlice";
 import type { Event } from "@/utils/types";
 import TimelineFraction from "./TimelineFraction";
 
@@ -44,7 +43,7 @@ const calcTimeFractions = (day: DayEvents): TimeFrac[] => {
   return timeFractions;
 };
 
-const DayBar = ({ day, date }: { day: DayEvents; date: Date }) => {
+const DayBar = ({ day }: { day: DayEvents }) => {
   const dispatch = useAppDispatch();
 
   const timeFracs = calcTimeFractions(day);
@@ -52,10 +51,10 @@ const DayBar = ({ day, date }: { day: DayEvents; date: Date }) => {
 
   return (
     <div className="grid grid-cols-[1.5rem_auto] gap-2 items-center transition-all hover:font-bold min-h-10 hover:min-h-16 cursor-pointer">
-      <a className="text-end text-xl">{date.getUTCDate()}</a>
+      <a className="text-end text-xl">{new Date(day.date).getUTCDate()}</a>
       <div
         className="grid bg-neutral-200 dark:bg-neutral-800 rounded-sm h-full"
-        onClick={() => dispatch(set(date.toDateString()))}
+        onClick={() => dispatch(setSelDay(new Date(day.date).getUTCDate()))}
         style={{
           gridTemplateColumns,
         }}

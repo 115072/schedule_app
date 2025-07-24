@@ -8,7 +8,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-neutral-300 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 sticky top-0 flex items-center mb-8">
+    <header className="bg-neutral-300 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 fixed top-0 left-0 right-0 flex items-center z-10">
       <h1 className="font-bold text-4xl m-4 w-full">Our Schedule App</h1>
       <button
         onClick={toggleTheme}
