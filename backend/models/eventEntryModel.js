@@ -34,3 +34,10 @@ export async function removeEventById(id) {
   await db.query("DELETE FROM evententry WHERE id = $1", [id]);
   return "The event is deleted";
 }
+
+export async function getEventByDate(date) {
+  const result = await db.query("SELECT * FROM evententry WHERE day = $1", [
+    date,
+  ]);
+  return result.rows;
+}
