@@ -9,18 +9,20 @@ const EventEntry = ({ event }: { event: Event }) => {
       <div>Duration: {event.durationMin}min</div>
       <div className="flex flex-row justify-end gap-4">
         <Button
-          text="Edit"
           action={() => {
             console.log("edit");
           }}
-        ></Button>
+        >
+          Edit
+        </Button>
         <Button
-          text="Delete"
           type="danger"
           action={() => {
             console.log("delete");
           }}
-        ></Button>
+        >
+          Delete
+        </Button>
       </div>
     </div>
   );

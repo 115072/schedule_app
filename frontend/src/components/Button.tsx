@@ -1,19 +1,23 @@
+import type React from "react";
 import type { MouseEventHandler } from "react";
 
 interface ButtonProps {
-  type?: "normal" | "danger";
-  text: string;
+  children: React.ReactNode;
+  type?: "normal" | "danger" | "submit";
   icon?: string;
-  action: MouseEventHandler;
+  action?: MouseEventHandler;
 }
 
 export default function Button(props: ButtonProps) {
   return (
-    <div
+    <button
       onClick={props.action}
+      type={props.type == "submit" ? "submit" : undefined}
       className={
-        "flex flex-row items-center justify-center px-6 py-2 min-w-24 rounded-xs font-bold cursor-pointer select-none transition-colors " +
-        (props.type == "normal" || props.type === undefined
+        "flex flex-row items-center justify-center px-6 py-2 min-w-24 w-full rounded-xs font-bold cursor-pointer select-none transition-colors " +
+        (props.type == "normal" ||
+        props.type == "submit" ||
+        props.type === undefined
           ? "bg-neutral-300 hover:bg-neutral-50 dark:bg-neutral-700 dark:hover:bg-neutral-500 "
           : "") +
         (props.type == "danger"
@@ -24,7 +28,7 @@ export default function Button(props: ButtonProps) {
       <div hidden={props.icon === undefined || props.icon == ""}>
         {props.icon}
       </div>
-      <div>{props.text}</div>
-    </div>
+      {props.children}
+    </button>
   );
 }

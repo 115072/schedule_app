@@ -10,6 +10,7 @@ export interface DayEvents {
 
 function fetchDaysOfMonth(arr: DayEvents[], month: number) {
   // Fake data
+  //TODO fetch from API
   arr.splice(0);
   for (let i = 1; i <= getMonthDays(month); i++) {
     const day: Date = new Date(2025, month, i + 1);
@@ -60,11 +61,8 @@ function fetchDaysOfMonth(arr: DayEvents[], month: number) {
   }
 }
 
-const initialState: { selDay: DayEvents; days: DayEvents[] } = {
-  selDay: {
-    date: new Date().toUTCString(),
-    events: [],
-  },
+const initialState: { selDayIdx: number | null; days: DayEvents[] } = {
+  selDayIdx: null,
   days: [],
 };
 
@@ -74,16 +72,29 @@ export const daysSlice = createSlice({
   reducers: {
     fetchMonth: (state, action: PayloadAction<number>) => {
       fetchDaysOfMonth(state.days, action.payload);
-      state.selDay = state.days[0];
+      state.selDayIdx = 0;
     },
     setSelDay: (state, action: PayloadAction<number>) => {
-      state.selDay = state.days[action.payload - 1];
+      state.selDayIdx = action.payload - 1;
+    },
+    addNewEvent: (state, action: PayloadAction<Event>) => {
+      if (!state.selDayIdx) return;
+      state.days[state.selDayIdx].events.push(action.payload);
+      state.days[state.selDayIdx].events.sort(
+        (a, b) => a.startTimestamp - b.startTimestamp
+      );
     },
   },
 });
 
 export default daysSlice.reducer;
-export const { fetchMonth, setSelDay } = daysSlice.actions;
+export const { fetchMonth, setSelDay, addNewEvent } = daysSlice.actions;
 
 export const selectDays = (state: RootState) => state.days;
-export const selectSelDay = (state: RootState) => state.days.selDay;
+export const selectSelDay = (state: RootState) => {
+  if (state.days.selDayIdx != null) {
+    return state.days.days[state.days.selDayIdx];
+  } else {
+    return null;
+  }
+};
