@@ -3,7 +3,7 @@ import { getMonthName } from "@/utils/translateMonthNum";
 
 import DayBar from "@/components/month_overview/DayBar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchMonth, selectDays } from "@/store/daysSlice";
+import { fetchMonth, selectDays, setSelDay } from "@/store/daysSlice";
 
 const MonthView = () => {
   const [currMonth, setCurrMonth] = useState(new Date().getUTCMonth());
@@ -12,6 +12,8 @@ const MonthView = () => {
 
   useEffect(() => {
     dispatch(fetchMonth(currMonth));
+    if (currMonth === new Date().getUTCMonth())
+      dispatch(setSelDay(new Date().getUTCDate()));
   }, [currMonth, dispatch]);
 
   function prevMonth() {

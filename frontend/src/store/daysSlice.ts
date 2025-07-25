@@ -74,7 +74,7 @@ export const daysSlice = createSlice({
   reducers: {
     fetchMonth: (state, action: PayloadAction<number>) => {
       fetchDaysOfMonth(state.days, action.payload);
-      // state.selDay = state.days[0];
+      state.selDay = state.days[0];
     },
     setSelDay: (state, action: PayloadAction<number>) => {
       state.selDay = state.days[action.payload - 1];
