@@ -3,6 +3,8 @@ import TagTree from "./TagTree";
 import { useState } from "react";
 import { selectTags } from "@/store/tagsSlice";
 
+//TODO add 'reset filter' button
+
 const TagsList = () => {
   const [shown, setShown] = useState(false);
   const tags = useAppSelector(selectTags);

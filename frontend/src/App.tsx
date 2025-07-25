@@ -4,6 +4,9 @@ import MonthView from "@/components/month_overview/MonthView";
 import DayEntriesView from "@/components/day_entries_view/DayEntriesView";
 import TagsList from "@/components/tags_filter/TagsList";
 
+//TODO event tag management
+//TODO app styling
+
 function App() {
   return (
     <>

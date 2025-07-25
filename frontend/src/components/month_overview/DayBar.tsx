@@ -3,6 +3,9 @@ import { useAppDispatch } from "@/store/hooks";
 import type { Event } from "@/utils/types";
 import TimelineFraction from "./TimelineFraction";
 
+//TODO filter by tags
+//TODO timeline hover tooltip
+
 interface TimeFrac {
   fr: number;
   events: Event[];

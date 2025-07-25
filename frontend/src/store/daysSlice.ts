@@ -3,6 +3,8 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 import { getMonthDays } from "@/utils/translateMonthNum";
 
+//TODO connect to API
+
 export interface DayEvents {
   date: string;
   events: Event[];
