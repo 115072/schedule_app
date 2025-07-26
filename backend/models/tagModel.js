@@ -7,7 +7,16 @@ export async function getAllTags() {
 
 export async function getTagById(id) {
   const result = await db.query("SELECT * FROM tag WHERE id = $1", [id]);
-  return result.rows;
+  const baseTag = result.rows[0];
+  return await buildTagTree(baseTag);
+}
+
+async function buildTagTree(tag) {
+  const children = await db.query("SELECT * FROM tag WHERE parenttag = $1", [
+    tag.id,
+  ]);
+  tag.children = await Promise.all(children.rows.map(buildTagTree));
+  return tag;
 }
 
 export async function makeTag(tag) {
