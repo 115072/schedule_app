@@ -2,7 +2,18 @@ import db from "../db.js";
 
 export async function getAllTags() {
   const result = await db.query("SELECT * FROM tag");
-  return result.rows;
+  /*
+  const rowcounter = result.rows.length;
+  const tagsList = [];
+  for (let index = 0; index < rowcounter; index++) {
+    tagsList.push(await buildTagTree(result.rows[index]));
+  }
+  //Ez volt az en verziom, amit chatgpt minimalis segitsegevel csinaltam.
+  //Megy gond nélkül, de azt mondta, hogy ennel van gyorsabb megoldas is es inkabb haszanljam azt
+  */
+  const promises = result.rows.map((row) => buildTagTree(row));
+  const tagsList = await Promise.all(promises);
+  return tagsList;
 }
 
 export async function getTagById(id) {
