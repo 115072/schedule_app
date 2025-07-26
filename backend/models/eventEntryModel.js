@@ -41,3 +41,12 @@ export async function getEventByDate(date) {
   ]);
   return result.rows;
 }
+
+export async function getEventByDateAndId(event) {
+  const { day, id } = event;
+  const result = await db.query(
+    "SELECT * FROM evententry WHERE day = $1 AND id = $2",
+    [day, id]
+  );
+  return result.rows;
+}

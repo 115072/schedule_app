@@ -5,6 +5,7 @@ import {
   updateEventById,
   removeEventById,
   getEventByDate,
+  getEventByDateAndId,
 } from "../models/eventEntryModel.js";
 
 export async function fetchAllEvents(req, res) {
@@ -60,6 +61,19 @@ export async function deleteEventById(req, res) {
 export async function fetchEventByDate(req, res) {
   try {
     const event = await getEventByDate(req.params.date);
+    res.json(event);
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function fetchEventByDateAndId(req, res) {
+  try {
+    const event = await getEventByDateAndId({
+      day: req.params.date,
+      id: req.params.id,
+    });
     res.json(event);
   } catch (error) {
     console.error("Error fetching event:", error);

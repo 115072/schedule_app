@@ -6,6 +6,7 @@ import {
   putEventById,
   deleteEventById,
   fetchEventByDate,
+  fetchEventByDateAndId,
 } from "../controllers/eventEntryController.js";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.post("/event", postEvent);
 router.put("/event/:id", putEventById);
 router.delete("/event/:id", deleteEventById);
 router.get("/event/date/:date", fetchEventByDate);
+router.get("/event/:date/:id", fetchEventByDateAndId);
 
 export default router;
