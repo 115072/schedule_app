@@ -8,6 +8,17 @@ import TagsList from "@/components/tags_filter/TagsList";
 //TODO app styling
 
 function App() {
+  // useEffect(() => {
+  //   fetch("http://localhost:4000/api/test")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("Response from backend:", data);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Failed to fetch:", err);
+  //     });
+  // }, []);
+
   return (
     <>
       <Header></Header>
