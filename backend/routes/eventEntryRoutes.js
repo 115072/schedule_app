@@ -7,6 +7,7 @@ import {
   deleteEventById,
   fetchEventByDate,
   fetchEventByDateAndId,
+  fetchEventByYearAndMonth,
 } from "../controllers/eventEntryController.js";
 
 const router = express.Router();
@@ -18,5 +19,6 @@ router.put("/event/:id", putEventById);
 router.delete("/event/:id", deleteEventById);
 router.get("/event/date/:date", fetchEventByDate);
 router.get("/event/:date/:id", fetchEventByDateAndId);
+router.get("/event/date/:year/:month", fetchEventByYearAndMonth);
 
 export default router;
