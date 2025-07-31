@@ -1,7 +1,7 @@
 import db from "../db.js";
 
 export async function getAllTags() {
-  const result = await db.query("SELECT * FROM tag");
+  const result = await db.query("SELECT * FROM tag WHERE parenttag IS null");
   /*
   const rowcounter = result.rows.length;
   const tagsList = [];
