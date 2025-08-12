@@ -5,6 +5,7 @@ import {
   postUser,
   putUserById,
   deleteUserById,
+  logInUser,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get("/user/:id", fetchUserById);
 router.post("/user", postUser);
 router.put("/user/:id", putUserById);
 router.delete("/user/:id", deleteUserById);
+router.post("/user/login", logInUser);
 
 export default router;

@@ -4,7 +4,9 @@ import {
   makeUser,
   updateUserById,
   removeUserById,
+  logInUserSql,
 } from "../models/userModel.js";
+import bcrypt from "bcryptjs";
 
 export async function fetchAllUsers(req, res) {
   try {
@@ -28,7 +30,8 @@ export async function fetchUserById(req, res) {
 
 export async function postUser(req, res) {
   try {
-    const users = await makeUser(req.body);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const users = await makeUser({ ...req.body, password: hashedPassword });
     res.json(users);
   } catch (error) {
     console.error("Error posting user:", error);
@@ -52,6 +55,27 @@ export async function deleteUserById(req, res) {
     res.json(users);
   } catch (error) {
     console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function logInUser(req, res) {
+  try {
+    const users = await logInUserSql(req.body);
+    if (!users) {
+      return res.status(401).json("you are not allowed to log in");
+    }
+    const passwordsMatch = await bcrypt.compare(
+      req.body.password,
+      users.password
+    );
+    if (!passwordsMatch) {
+      return res.status(401).json("you are not allowed to log in");
+    } else {
+      res.json("login successfull");
+    }
+  } catch (error) {
+    console.error("Error logging in user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
