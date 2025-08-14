@@ -7,6 +7,7 @@ import {
   logInUserSql,
 } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export async function fetchAllUsers(req, res) {
   try {
@@ -72,7 +73,12 @@ export async function logInUser(req, res) {
     if (!passwordsMatch) {
       return res.status(401).json("you are not allowed to log in");
     } else {
-      res.json("login successfull");
+      const generatedToken = jwt.sign(
+        { id: users.id, role: users.role },
+        "mony",
+        { expiresIn: "1h" }
+      );
+      res.json({ token: generatedToken });
     }
   } catch (error) {
     console.error("Error logging in user:", error);
