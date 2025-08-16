@@ -14,7 +14,7 @@ export function protect(req, res, next) {
         next();
       } catch (error) {
         console.error("there was an error: ", error);
-        res.status(401).json("there was an error: ", error);
+        res.status(401).json("failed to authorize token");
       }
     } else {
       return res.status(401).json("the sent token is bad");
