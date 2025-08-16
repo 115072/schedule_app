@@ -7,7 +7,7 @@ export async function getAllUsers() {
 
 export async function getUserById(id) {
   const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-  return result.rows;
+  return result.rows[0];
 }
 
 export async function makeUser(user) {
