@@ -5,6 +5,7 @@ import {
   postTag,
   putTagById,
   deleteTagById,
+  fetchTagByMonth,
 } from "../controllers/tagController.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get("/tag/:id", fetchTagById);
 router.post("/tag", postTag);
 router.put("/tag/:id", putTagById);
 router.delete("/tag/:id", deleteTagById);
+router.get("/tags/duration/month/:year/:month", fetchTagByMonth);
 
 export default router;

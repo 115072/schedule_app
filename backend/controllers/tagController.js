@@ -4,6 +4,7 @@ import {
   makeTag,
   updateTagById,
   removeTagById,
+  getTagByMonth,
 } from "../models/tagModel.js";
 
 export async function fetchAllTags(req, res) {
@@ -52,6 +53,19 @@ export async function deleteTagById(req, res) {
     res.json(tags);
   } catch (error) {
     console.error("Error deleting tag:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function fetchTagByMonth(req, res) {
+  try {
+    const event = await getTagByMonth({
+      year: req.params.year,
+      month: req.params.month,
+    });
+    res.json(event);
+  } catch (error) {
+    console.error("Error fetching tags:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
