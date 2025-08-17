@@ -68,3 +68,17 @@ export async function getTagByMonth(event) {
 
   return result.rows;
 }
+
+export async function getTagByDays(event) {
+  const { year, month } = event;
+  const result = await db.query(
+    `
+    SELECT SUM(evententry.duration), evententry.day, tag.name FROM evententry 
+    JOIN tag ON evententry.tag = tag.id 
+    WHERE EXTRACT(YEAR FROM day) = $1 AND EXTRACT(MONTH FROM day) = $2
+     GROUP BY evententry.day, tag.name
+    `,
+    [year, month]
+  );
+  return result.rows;
+}
