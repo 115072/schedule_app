@@ -26,7 +26,8 @@ services:
       DB_NAME: db
       DB_HOST: postgres
     volumes:
-      - ./backend:/app
+      - ./backend:/app # Mounts your local code
+      - /app/node_modules # Preserves the node_modules from the image
 
   frontend:
     build:

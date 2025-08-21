@@ -7,7 +7,7 @@ export async function getAllEvents() {
 
 export async function getEventById(id) {
   const result = await db.query("SELECT * FROM evententry WHERE id = $1", [id]);
-  return result.rows;
+  return result.rows[0];
 }
 
 export async function makeEvent(event) {
@@ -48,5 +48,29 @@ export async function getEventByDateAndId(event) {
     "SELECT * FROM evententry WHERE day = $1 AND id = $2",
     [day, id]
   );
-  return result.rows;
+  return result.rows[0];
+}
+
+export async function getEventByYearAndMonth(event) {
+  const { year, month } = event;
+  const result = await db.query(
+    `
+    SELECT * FROM evententry
+    WHERE EXTRACT(YEAR FROM day) = $1
+      AND EXTRACT(MONTH FROM day) = $2
+    `,
+    [year, month]
+  );
+  const days = {};
+  for (let row of result.rows) {
+    const dateKey = row.day.toISOString().split("T")[0];
+
+    if (!days[dateKey]) {
+      days[dateKey] = [];
+    }
+
+    days[dateKey].push(row);
+  }
+
+  return days;
 }

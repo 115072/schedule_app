@@ -6,6 +6,7 @@ import {
   removeEventById,
   getEventByDate,
   getEventByDateAndId,
+  getEventByYearAndMonth,
 } from "../models/eventEntryModel.js";
 
 export async function fetchAllEvents(req, res) {
@@ -73,6 +74,19 @@ export async function fetchEventByDateAndId(req, res) {
     const event = await getEventByDateAndId({
       day: req.params.date,
       id: req.params.id,
+    });
+    res.json(event);
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function fetchEventByYearAndMonth(req, res) {
+  try {
+    const event = await getEventByYearAndMonth({
+      year: req.params.year,
+      month: req.params.month,
     });
     res.json(event);
   } catch (error) {

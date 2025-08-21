@@ -1,7 +1,7 @@
 import db from "../db.js";
 
 export async function getAllTags() {
-  const result = await db.query("SELECT * FROM tag");
+  const result = await db.query("SELECT * FROM tag WHERE parenttag IS null");
   /*
   const rowcounter = result.rows.length;
   const tagsList = [];
@@ -53,4 +53,32 @@ export async function updateTagById(tag) {
 export async function removeTagById(id) {
   await db.query("DELETE FROM tag WHERE id = $1", [id]);
   return "The tag and its children tags are deleted";
+}
+
+export async function getTagByMonth(event) {
+  const { year, month } = event;
+  const result = await db.query(
+    `
+    SELECT SUM(evententry.duration), tag.name FROM evententry
+    JOIN tag ON evententry.tag = tag.id WHERE EXTRACT(YEAR FROM day) = $1 
+    AND EXTRACT(MONTH FROM day) = $2 GROUP BY tag.name
+    `,
+    [year, month]
+  );
+
+  return result.rows;
+}
+
+export async function getTagByDays(event) {
+  const { year, month } = event;
+  const result = await db.query(
+    `
+    SELECT SUM(evententry.duration), evententry.day, tag.name FROM evententry 
+    JOIN tag ON evententry.tag = tag.id 
+    WHERE EXTRACT(YEAR FROM day) = $1 AND EXTRACT(MONTH FROM day) = $2
+     GROUP BY evententry.day, tag.name
+    `,
+    [year, month]
+  );
+  return result.rows;
 }

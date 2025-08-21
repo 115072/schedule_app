@@ -88,7 +88,8 @@ CREATE TABLE public.users (
     id integer NOT NULL,
     username text,
     password text,
-    role integer
+    role integer,
+    email text
 );
 
 
@@ -139,10 +140,10 @@ COPY public.tag (id, name, hexcolor, parenttag) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-COPY public.users (id, username, password, role) FROM stdin;
-1	Patyko	mony	0
-2	Adi	nagy mony	1
-3	Flauri	kis mony	2
+COPY public.users (id, username, password, role, email) FROM stdin;
+1	Patyko	mony	0	patrik@mony.com
+2	Adi	nagy mony	1	Adam@mony.com
+3	Flauri	kis mony	2	jurik.florian@gmail.com
 \.
 
 
