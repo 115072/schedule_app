@@ -88,7 +88,7 @@ export async function fetchTagByDays(req, res) {
     });
     res.json(resultObject);
   } catch (error) {
-    console.error("githup commit test:", error);
+    console.error("Error fetching tags:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }

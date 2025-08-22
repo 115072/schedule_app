@@ -49,5 +49,13 @@ services:
     depends_on:
       - postgres
 
+  python-analytics:
+    build: ./python-analytics
+    restart: always
+    volumes:
+      - ./python-analytics:/app
+    depends_on:
+      - postgres
+
 volumes:
   pgdata:
