@@ -37,7 +37,7 @@ export default function CreateEntry() {
       startTimestamp: new Date(selDay.date).setUTCHours(hours, minutes, 0, 0),
       durationMin: data.durationMin,
       //TODO implement tag selection
-      tagID: 31,
+      tagID: 2,
     };
     dispatch(addNewEvent(newEvent));
     reset();

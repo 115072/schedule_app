@@ -27,13 +27,13 @@ export const daysSlice = createSlice({
     setSelDay: (state, action: PayloadAction<number>) => {
       state.selDayIdx = action.payload - 1;
     },
-    addNewEvent: (state, action: PayloadAction<Event>) => {
-      if (!state.selDayIdx) return;
-      state.days[state.selDayIdx].events.push(action.payload);
-      state.days[state.selDayIdx].events.sort(
-        (a, b) => a.startTimestamp - b.startTimestamp
-      );
-    },
+    // addNewEvent: (state, action: PayloadAction<Event>) => {
+    //   if (!state.selDayIdx) return;
+    //   state.days[state.selDayIdx].events.push(action.payload);
+    //   state.days[state.selDayIdx].events.sort(
+    //     (a, b) => a.startTimestamp - b.startTimestamp
+    //   );
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -48,9 +48,48 @@ export const daysSlice = createSlice({
 
           console.log(state.days);
         }
-      );
+      )
+      .addCase(addNewEvent.fulfilled, (state, action) => {
+        if (action.payload == null || state.selDayIdx == null) return;
+        state.days[state.selDayIdx].events.push(action.payload);
+        state.days[state.selDayIdx].events.sort(
+          (a, b) => a.startTimestamp - b.startTimestamp
+        );
+      })
+      .addCase(addNewEvent.rejected, () => {
+        console.error("Failed to add new event");
+      });
   },
 });
+
+export const addNewEvent = createAsyncThunk(
+  "days/addNewEvent",
+  async (event: Event, { getState }) => {
+    const state = getState() as RootState;
+    const selDayIdx = state.days.selDayIdx;
+    if (selDayIdx == null) return;
+
+    await client({
+      url: `/event`,
+      method: "post",
+      data: {
+        day: new Date(state.days.days[selDayIdx].date)
+          .toISOString()
+          .split("T")[0],
+        start: `${new Date(event.startTimestamp).getUTCHours()}:${new Date(
+          event.startTimestamp
+        ).getUTCMinutes()}:00`,
+        duration: `${Math.floor(event.durationMin / 60)}:${
+          event.durationMin % 60
+        }:00`,
+        description: event.description,
+        tag: event.tagID,
+      },
+    });
+
+    return event;
+  }
+);
 
 export const fetchMonth = createAsyncThunk(
   "days/fetchMonth",
@@ -86,7 +125,7 @@ export const fetchMonth = createAsyncThunk(
             Number(e.duration.split(":")[1]),
           description: e.description,
           //TODO
-          tagID: 1,
+          tagID: e.tag,
         })
       );
     }
@@ -96,7 +135,7 @@ export const fetchMonth = createAsyncThunk(
 );
 
 export default daysSlice.reducer;
-export const { setSelDay, addNewEvent } = daysSlice.actions;
+export const { setSelDay } = daysSlice.actions;
 
 export const selectDays = (state: RootState) => state.days;
 export const selectSelDay = (state: RootState) => {
