@@ -29,14 +29,14 @@ services:
       - ./backend:/app # Mounts your local code
       - /app/node_modules # Preserves the node_modules from the image
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:80"
+  #   depends_on:
+  #     - backend
 
   pgadmin:
     image: dpage/pgadmin4:latest
