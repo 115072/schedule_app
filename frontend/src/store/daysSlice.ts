@@ -45,8 +45,6 @@ export const daysSlice = createSlice({
         (state, action: PayloadAction<DayEvents[]>) => {
           state.days = action.payload;
           state.selDayIdx = 0;
-
-          console.log(state.days);
         }
       )
       .addCase(addNewEvent.fulfilled, (state, action) => {

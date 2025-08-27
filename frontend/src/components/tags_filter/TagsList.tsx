@@ -1,13 +1,18 @@
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import TagTree from "./TagTree";
-import { useState } from "react";
-import { selectTags } from "@/store/tagsSlice";
+import { useEffect, useState } from "react";
+import { selectTags, fetchTags } from "@/store/tagsSlice";
 
 //TODO add 'reset filter' button
 
 const TagsList = () => {
-  const [shown, setShown] = useState(false);
+  const [shown, setShown] = useState(true);
   const tags = useAppSelector(selectTags);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchTags());
+  }, []);
 
   return (
     <div className="flex flex-col pl-12">

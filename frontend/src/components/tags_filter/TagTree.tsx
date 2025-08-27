@@ -7,8 +7,8 @@ const TagTree = ({ tags, level = 0 }: { tags: EventTag[]; level?: number }) => {
       {tags.map((tag: EventTag) => (
         <div key={tag.name}>
           <Tag tag={tag} level={level} isLast={tags.at(-1) === tag} />
-          {tag.subtags && tag.subtags.length > 0 && (
-            <TagTree tags={tag.subtags} level={level + 1} />
+          {tag.children && tag.children.length > 0 && (
+            <TagTree tags={tag.children} level={level + 1} />
           )}
         </div>
       ))}

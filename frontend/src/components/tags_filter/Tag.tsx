@@ -5,7 +5,6 @@ import { toggleFilter, type EventTag } from "@/store/tagsSlice";
 const Tag = ({
   tag,
   level = 0,
-  isLast = false,
 }: {
   tag: EventTag;
   level?: number;
@@ -27,28 +26,10 @@ const Tag = ({
       }
       onClick={() => dispatch(toggleFilter(tag))}
     >
-      <div className="flex flex-row">
-        {Array.from({ length: level }, (_, i) => (
-          <div
-            key={i}
-            className={"size-8 grid grid-cols-2 grid-rows-2 text-neutral-500"}
-          >
-            <div className={i === level - 1 ? "" : ""}></div>
-            <div
-              className={
-                (i === level - 1 ? "border-l-2 border-b-2" : "border-l-2") +
-                " " +
-                (isLast && i === level - 1 ? "rounded-bl-md" : "")
-              }
-            ></div>
-            <div className={i === level - 1 ? "" : ""}></div>
-            <div
-              className={isLast && i === level - 1 ? "" : "border-l-2"}
-            ></div>
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-row items-center gap-1 pl-[0.55rem]">
+      <div
+        className="flex flex-row items-center gap-1"
+        style={{ marginLeft: level * 24 }}
+      >
         <div
           className="size-4 rounded-xs"
           style={{ backgroundColor: tag.color }}
