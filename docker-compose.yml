@@ -58,6 +58,11 @@ services:
       - postgres
     ports:
       - "8001:8000"
+    environment:
+      DB_USER: user
+      DB_PASS: passw
+      DB_NAME: db
+      DB_HOST: postgres
 
 volumes:
   pgdata:
