@@ -56,6 +56,8 @@ services:
       - ./python-analytics:/app
     depends_on:
       - postgres
+    ports:
+      - "8001:8000"
 
 volumes:
   pgdata:

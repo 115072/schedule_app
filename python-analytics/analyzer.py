@@ -1,10 +1,14 @@
-# In python-analytics/analyzer.py
+# 1. Import the FastAPI class
+from fastapi import FastAPI
 
-import time
+# 2. Create an "instance" of the FastAPI application
+# This 'app' variable is the main point of interaction for our API
+app = FastAPI()
 
-print("Python analytics service is starting...")
-print("I will be doing complex data analysis soon!")
-
-# This keeps the script running so the container doesn't exit immediately
-while True:
-    time.sleep(10) 
+# 3. Define an endpoint using a "decorator"
+# This tells FastAPI that when someone visits the main URL ("/"),
+# the function right below it should handle the request.
+@app.get("/")
+async def root():
+    # 4. Return a simple JSON response
+    return {"message": "Hello from the Python Analytics Service!"}

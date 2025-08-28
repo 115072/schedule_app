@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # 6. Tell Docker what command to run when the container starts
-CMD ["python","-u", "analyzer.py"]
+CMD ["uvicorn", "analyzer:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
