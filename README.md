@@ -48,4 +48,5 @@ It was developed as a **learning project** to practice **React, Express.js, Post
 
 ## 🔗 API Documentation
 
-The backend API is fully documented with **Swagger**:  
+The backend API is fully documented with **Swagger**: 
+https://app.swaggerhub.com/apis/JURIKFLORIAN/schedule_app/1.0.0
