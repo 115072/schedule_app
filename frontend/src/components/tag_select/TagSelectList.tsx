@@ -1,14 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import TagSelectTree from "./TagSelectTree";
-import { useEffect, useReducer } from "react";
-import { selectTags, fetchTags } from "@/store/tagsSlice";
+import { use, useEffect, useReducer } from "react";
+import { selectTags, fetchTags, selectSelTagId } from "@/store/tagsSlice";
 import {
   InputShownContext,
   InputShownDispatchContext,
 } from "./TagInputContext";
 
-const TagSelectList = () => {
+const TagSelectList = ({ onChange }: { onChange: any }) => {
   const tags = useAppSelector(selectTags);
+  const selTagId = useAppSelector(selectSelTagId);
   const dispatch = useAppDispatch();
 
   const [inputShown, inputShownDispatch] = useReducer(inputShownReducer, false);
@@ -16,6 +17,10 @@ const TagSelectList = () => {
   useEffect(() => {
     dispatch(fetchTags());
   }, []);
+
+  useEffect(() => {
+    onChange(selTagId);
+  }, [selTagId]);
 
   return (
     <div className="flex flex-col">

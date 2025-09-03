@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import Button from "../Button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addNewEvent, selectSelDay } from "@/store/daysSlice";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import type { Event } from "@/utils/types";
 import TagSelectList from "../tag_select/TagSelectList";
+import { setSelTag } from "@/store/tagsSlice";
 
 const schema = z.object({
   description: z.string().nonempty({ error: "Please provide a description" }),
@@ -14,6 +15,9 @@ const schema = z.object({
   durationMin: z
     .int({ error: "Please provide the duration in minutes" })
     .positive({ error: "The duration must be a positive number" }),
+  tagId: z
+    .number({ error: "Please select a tag" })
+    .nonoptional({ error: "Please select a tag" }),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -28,6 +32,7 @@ export default function CreateEntry() {
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<FormFields>({ resolver: zodResolver(schema) });
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
@@ -37,10 +42,10 @@ export default function CreateEntry() {
       description: data.description,
       startTimestamp: new Date(selDay.date).setUTCHours(hours, minutes, 0, 0),
       durationMin: data.durationMin,
-      //TODO implement tag selection
-      tagID: 2,
+      tagID: data.tagId,
     };
     dispatch(addNewEvent(newEvent));
+    dispatch(setSelTag(null));
     reset();
   };
 
@@ -94,7 +99,18 @@ export default function CreateEntry() {
         {errors.durationMin && (
           <p className="text-red-500">{errors.durationMin.message}</p>
         )}
-        <TagSelectList></TagSelectList>
+        <Controller
+          name="tagId"
+          control={control}
+          render={({ field }) => (
+            <>
+              <TagSelectList {...field} />
+              {errors.tagId && (
+                <p className="text-red-500">{errors.tagId.message}</p>
+              )}
+            </>
+          )}
+        />
         <div className="flex flex-row justify-evenly gap-4">
           <Button type="submit">Submit</Button>
           <Button type="danger" action={handleCancel}>
