@@ -1,5 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
+  deleteTag,
+  fetchTags,
   selectSelTag,
   selectSelTagId,
   setSelTag,
@@ -66,7 +68,16 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
             >
               <ul className="*:min-w-24 *:text-right *:px-2">
                 <li className="hover:bg-neutral-300">Edit</li>
-                <li className="text-red-500 hover:bg-red-200">Delete</li>
+                <li
+                  onClick={() => {
+                    dispatch(deleteTag(tag.id)).then(() =>
+                      dispatch(fetchTags())
+                    );
+                  }}
+                  className="text-red-500 hover:bg-red-200"
+                >
+                  Delete
+                </li>
               </ul>
             </div>
           </div>

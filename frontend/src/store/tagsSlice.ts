@@ -87,7 +87,12 @@ export const tagsSlice = createSlice({
           if (action.payload == undefined) return state;
           return { ...state, selTagId: action.payload };
         }
-      );
+      )
+      .addCase(deleteTag.fulfilled, (state, action: PayloadAction<number>) => {
+        if (state.selTagId === action.payload) {
+          state.selTagId = null;
+        }
+      });
   },
 });
 
@@ -109,6 +114,14 @@ export const addNewTag = createAsyncThunk(
       },
     });
     return response.data.id;
+  }
+);
+
+export const deleteTag = createAsyncThunk(
+  "tags/deleteTag",
+  async (tagId: number) => {
+    await client({ url: `/tag/${tagId}`, method: "delete" });
+    return tagId;
   }
 );
 
