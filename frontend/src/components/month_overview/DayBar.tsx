@@ -53,7 +53,7 @@ const DayBar = ({ day }: { day: DayEvents }) => {
   const gridTemplateColumns = timeFracs.map((tf) => `${tf.fr}fr`).join(" ");
 
   return (
-    <div className="grid grid-cols-[1.5rem_auto] gap-2 items-center transition-all hover:font-bold min-h-10 hover:min-h-16 cursor-pointer">
+    <div className="grid grid-cols-[1.5rem_auto] gap-2 items-center transition-all hover:font-bold min-h-10 cursor-pointer">
       <a className="text-end text-xl">{new Date(day.date).getUTCDate()}</a>
       <div
         className="grid bg-neutral-200 dark:bg-neutral-800 rounded-sm h-full"
