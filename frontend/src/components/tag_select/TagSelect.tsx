@@ -48,11 +48,17 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
           <div>{tag.name}</div>
         </div>
         <div className="flex flex-row">
-          <div className="not-group-hover:invisible group-hover:visible hover:bg-neutral-400 flex items-center group/tooltip">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="not-group-hover:invisible group-hover:visible hover:bg-neutral-400 flex items-center group/tooltip"
+          >
             <span className="material-symbols-outlined">more_vert</span>
           </div>
           <div
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               if (!globalInputShown) {
                 setInputShown(true);
                 dispatchGlobalInputShown(true);
