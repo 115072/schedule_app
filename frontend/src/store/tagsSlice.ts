@@ -19,15 +19,15 @@ export interface EventTag {
   parenttag?: number | null;
 }
 
-const initialState: EventTag[] = [
-  {
-    id: 0,
-    name: "asdasdasd",
-    color: "#ffff00",
-    children: [],
-    parenttag: null,
-  },
-];
+interface TagsState {
+  selTagId: number | null;
+  tags: EventTag[];
+}
+
+const initialState: TagsState = {
+  selTagId: null,
+  tags: [],
+};
 
 export function findTagById(id?: number, tags?: EventTag[]): EventTag | null {
   if (tags === undefined || id === undefined) return null;
@@ -67,16 +67,27 @@ export const tagsSlice = createSlice({
   initialState,
   reducers: {
     toggleFilter: (state, action: PayloadAction<EventTag>) => {
-      state = updateFilters(action.payload, state);
+      state.tags = updateFilters(action.payload, state.tags);
+    },
+    setSelTag: (state, action: PayloadAction<number | null>) => {
+      state.selTagId = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchTags.fulfilled,
-      (state, action: PayloadAction<EventTag[]>) => {
-        return action.payload;
-      }
-    );
+    builder
+      .addCase(
+        fetchTags.fulfilled,
+        (state, action: PayloadAction<EventTag[]>) => {
+          return { ...state, tags: action.payload };
+        }
+      )
+      .addCase(
+        addNewTag.fulfilled,
+        (state, action: PayloadAction<number | undefined>) => {
+          if (action.payload == undefined) return state;
+          return { ...state, selTagId: action.payload };
+        }
+      );
   },
 });
 
@@ -85,7 +96,26 @@ export const fetchTags = createAsyncThunk("tags/fetchTags", async () => {
   return parseResponse(response.data);
 });
 
-export default tagsSlice.reducer;
-export const { toggleFilter } = tagsSlice.actions;
+export const addNewTag = createAsyncThunk(
+  "tags/addNewTag",
+  async (tag: EventTag) => {
+    const response = await client({
+      url: "/tag",
+      method: "post",
+      data: {
+        name: tag.name,
+        hexcolor: tag.color,
+        parenttag: tag.parenttag ?? null,
+      },
+    });
+    return response.data.id;
+  }
+);
 
-export const selectTags = (state: RootState) => state.tags;
+export default tagsSlice.reducer;
+export const { toggleFilter, setSelTag } = tagsSlice.actions;
+
+export const selectTags = (state: RootState) => state.tags.tags;
+export const selectSelTag = (state: RootState) =>
+  findTagById(state.tags.selTagId ?? undefined, state.tags.tags);
+export const selectSelTagId = (state: RootState) => state.tags.selTagId;

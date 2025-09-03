@@ -6,6 +6,7 @@ import { addNewEvent, selectSelDay } from "@/store/daysSlice";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import type { Event } from "@/utils/types";
+import TagSelectList from "../tag_select/TagSelectList";
 
 const schema = z.object({
   description: z.string().nonempty({ error: "Please provide a description" }),
@@ -67,11 +68,16 @@ export default function CreateEntry() {
   return (
     <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <input {...register("description")} placeholder="Description" />
+        <input
+          className="border-2 px-2 rounded-sm"
+          {...register("description")}
+          placeholder="Description"
+        />
         {errors.description && (
           <p className="text-red-500">{errors.description.message}</p>
         )}
         <input
+          className="border-2 px-2 rounded-sm"
           {...register("startTime")}
           type="time"
           placeholder="Start Time"
@@ -80,6 +86,7 @@ export default function CreateEntry() {
           <p className="text-red-500">{errors.startTime.message}</p>
         )}
         <input
+          className="border-2 px-2 rounded-sm"
           {...register("durationMin", { valueAsNumber: true })}
           type="number"
           placeholder="Duration in Minutes"
@@ -87,6 +94,7 @@ export default function CreateEntry() {
         {errors.durationMin && (
           <p className="text-red-500">{errors.durationMin.message}</p>
         )}
+        <TagSelectList></TagSelectList>
         <div className="flex flex-row justify-evenly gap-4">
           <Button type="submit">Submit</Button>
           <Button type="danger" action={handleCancel}>
