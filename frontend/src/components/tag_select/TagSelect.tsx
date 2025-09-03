@@ -17,6 +17,8 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
   const globalInputShown = useContext(InputShownContext);
   const dispatchGlobalInputShown = useContext(InputShownDispatchContext);
 
+  const [menuShown, setMenuShown] = useState(false);
+
   const selTagId = useAppSelector(selectSelTagId);
   const dispatch = useAppDispatch();
 
@@ -48,13 +50,25 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
           <div>{tag.name}</div>
         </div>
         <div className="flex flex-row">
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className="not-group-hover:invisible group-hover:visible hover:bg-neutral-400 flex items-center group/tooltip"
-          >
-            <span className="material-symbols-outlined">more_vert</span>
+          <div onMouseLeave={() => setMenuShown(false)} className="relative">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuShown(!menuShown);
+              }}
+              className="not-group-hover:invisible group-hover:visible hover:bg-neutral-400 flex items-center group/tooltip"
+            >
+              <span className="material-symbols-outlined">more_vert</span>
+            </div>
+            <div
+              hidden={!menuShown}
+              className="absolute right-0 z-30 bg-neutral-200 shadow-md"
+            >
+              <ul className="*:min-w-24 *:text-right *:px-2">
+                <li className="hover:bg-neutral-300">Edit</li>
+                <li className="text-red-500 hover:bg-red-200">Delete</li>
+              </ul>
+            </div>
           </div>
           <div
             onClick={(e) => {
