@@ -2,7 +2,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { toggleFilter, type EventTag } from "@/store/tagsSlice";
 // import { useState } from "react";
 
-const Tag = ({
+const TagFilter = ({
   tag,
   level = 0,
 }: {
@@ -40,4 +40,4 @@ const Tag = ({
   );
 };
 
-export default Tag;
+export default TagFilter;
