@@ -12,7 +12,7 @@ export default function Button(props: ButtonProps) {
   return (
     <button
       onClick={props.action}
-      type={props.type == "submit" ? "submit" : undefined}
+      type={props.type == "submit" ? "submit" : "button"}
       className={
         "flex flex-row items-center justify-center px-6 py-2 min-w-24 w-full rounded-xs font-bold cursor-pointer select-none transition-colors " +
         (props.type == "normal" ||

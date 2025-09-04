@@ -2,12 +2,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addNewEvent, selectSelDay } from "@/store/daysSlice";
+import {
+  addNewEvent,
+  selectSelDay,
+  updateEvent,
+  updateMonth,
+} from "@/store/daysSlice";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import type { Event } from "@/utils/types";
 import TagSelectList from "../tag_select/TagSelectList";
-import { setSelTag } from "@/store/tagsSlice";
+import { setSelTagId } from "@/store/tagsSlice";
 
 const schema = z.object({
   description: z.string().nonempty({ error: "Please provide a description" }),
@@ -22,10 +27,16 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-export default function CreateEntry() {
+const CreateEntry = ({
+  defaultEvent = null,
+  closeFn = null,
+}: {
+  defaultEvent?: Event | null;
+  closeFn?: CallableFunction | null;
+}) => {
   const selDay = useAppSelector(selectSelDay);
   const dispatch = useAppDispatch();
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreating, setIsCreating] = useState(defaultEvent ? true : false);
 
   const {
     register,
@@ -39,20 +50,28 @@ export default function CreateEntry() {
     if (!selDay) return;
     const [hours, minutes] = data.startTime.split(":").map((s) => Number(s));
     const newEvent: Event = {
+      id: defaultEvent?.id,
       description: data.description,
       startTimestamp: new Date(selDay.date).setUTCHours(hours, minutes, 0, 0),
       durationMin: data.durationMin,
       tagID: data.tagId,
     };
-    dispatch(addNewEvent(newEvent));
-    dispatch(setSelTag(null));
+    if (!defaultEvent)
+      dispatch(addNewEvent(newEvent)).then(() => dispatch(updateMonth()));
+    else dispatch(updateEvent(newEvent)).then(() => dispatch(updateMonth()));
+    dispatch(setSelTagId(null));
+
+    if (closeFn) closeFn();
     reset();
-    setIsCreating(false);
+    if (!defaultEvent) setIsCreating(false);
+
+    console.log("onSubmit ran");
   };
 
   const handleCancel = () => {
+    if (closeFn) closeFn();
     reset();
-    setIsCreating(false);
+    if (!defaultEvent) setIsCreating(false);
   };
 
   useEffect(handleCancel, [selDay?.date, reset]);
@@ -78,6 +97,7 @@ export default function CreateEntry() {
           className="border-2 px-2 rounded-sm"
           {...register("description")}
           placeholder="Description"
+          defaultValue={defaultEvent?.description}
         />
         {errors.description && (
           <p className="text-red-500">{errors.description.message}</p>
@@ -87,6 +107,13 @@ export default function CreateEntry() {
           {...register("startTime")}
           type="time"
           placeholder="Start Time"
+          defaultValue={
+            defaultEvent
+              ? new Date(defaultEvent.startTimestamp)
+                  .toISOString()
+                  .substring(11, 16)
+              : undefined
+          }
         />
         {errors.startTime && (
           <p className="text-red-500">{errors.startTime.message}</p>
@@ -96,6 +123,7 @@ export default function CreateEntry() {
           {...register("durationMin", { valueAsNumber: true })}
           type="number"
           placeholder="Duration in Minutes"
+          defaultValue={defaultEvent?.durationMin}
         />
         {errors.durationMin && (
           <p className="text-red-500">{errors.durationMin.message}</p>
@@ -103,6 +131,7 @@ export default function CreateEntry() {
         <Controller
           name="tagId"
           control={control}
+          defaultValue={defaultEvent?.tagID}
           render={({ field }) => (
             <>
               <TagSelectList {...field} />
@@ -121,4 +150,6 @@ export default function CreateEntry() {
       </form>
     </div>
   );
-}
+};
+
+export default CreateEntry;

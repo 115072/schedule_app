@@ -104,7 +104,7 @@ export const tagsSlice = createSlice({
     toggleFilter: (state, action: PayloadAction<EventTag>) => {
       state.tags = updateFilters(action.payload, state.tags);
     },
-    setSelTag: (state, action: PayloadAction<number | null>) => {
+    setSelTagId: (state, action: PayloadAction<number | null>) => {
       state.selTagId = action.payload;
     },
   },
@@ -132,7 +132,7 @@ export const tagsSlice = createSlice({
 });
 
 export default tagsSlice.reducer;
-export const { toggleFilter, setSelTag } = tagsSlice.actions;
+export const { toggleFilter, setSelTagId } = tagsSlice.actions;
 
 export const selectTags = (state: RootState) => state.tags.tags;
 export const selectSelTag = (state: RootState) =>

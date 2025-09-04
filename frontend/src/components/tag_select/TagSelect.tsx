@@ -3,7 +3,7 @@ import {
   deleteTag,
   fetchTags,
   selectSelTagId,
-  setSelTag,
+  setSelTagId,
   type EventTag,
 } from "@/store/tagsSlice";
 import { useContext, useEffect, useState } from "react";
@@ -34,7 +34,7 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
     <>
       <div
         onClick={() => {
-          dispatch(setSelTag(tag.id));
+          dispatch(setSelTagId(tag.id));
         }}
         className={
           "flex flex-row h-8 w-full px-2 items-center justify-between select-none cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-700 group " +

@@ -96,12 +96,37 @@ export const addNewEvent = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   "days/deleteEvent",
-  async (eventId: number) => {
+  async (eventId?: number) => {
+    if (!eventId) return;
     await client({
       url: `/event/${eventId}`,
       method: "delete",
     });
     return eventId;
+  }
+);
+
+export const updateEvent = createAsyncThunk(
+  "days/updateEvent",
+  async (event: Event) => {
+    if (!event.id) return;
+    // TODO
+    const dateObj = new Date(event.startTimestamp);
+    await client({
+      url: `/event/${event.id}`,
+      method: "put",
+      data: {
+        day: dateObj.toISOString().split("T")[0],
+        start: `${dateObj.getUTCHours()}:${dateObj.getUTCMinutes()}:00`,
+        duration: `${Math.floor(event.durationMin / 60)}:${
+          event.durationMin % 60
+        }:00`,
+        description: event.description,
+        tag: event.tagID,
+      },
+    });
+
+    return event;
   }
 );
 
@@ -144,17 +169,12 @@ export const daysSlice = createSlice({
           state.days = action.payload;
         }
       )
-      .addCase(addNewEvent.fulfilled, (state, action) => {
-        if (action.payload == null || state.selDayIdx == null) return;
-        state.days[state.selDayIdx].events.push(action.payload);
-        state.days[state.selDayIdx].events.sort(
-          (a, b) => a.startTimestamp - b.startTimestamp
-        );
-      })
+      .addCase(addNewEvent.fulfilled, () => {})
       .addCase(addNewEvent.rejected, () => {
         console.error("Failed to add new event");
       })
-      .addCase(deleteEvent.fulfilled, () => {});
+      .addCase(deleteEvent.fulfilled, () => {})
+      .addCase(updateEvent.fulfilled, () => {});
   },
 });
 
