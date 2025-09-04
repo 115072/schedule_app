@@ -6,6 +6,7 @@ import {
   InputShownContext,
   InputShownDispatchContext,
 } from "./TagInputContext";
+import NewRootTagButton from "./NewRootTagButton";
 
 const TagSelectList = ({ onChange }: { onChange: any }) => {
   const tags = useAppSelector(selectTags);
@@ -29,6 +30,7 @@ const TagSelectList = ({ onChange }: { onChange: any }) => {
         <InputShownContext value={inputShown}>
           <InputShownDispatchContext value={inputShownDispatch}>
             <TagSelectTree tags={tags}></TagSelectTree>
+            <NewRootTagButton />
           </InputShownDispatchContext>
         </InputShownContext>
       </div>

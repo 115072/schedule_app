@@ -4,19 +4,23 @@ import { SwatchesPicker, type ColorResult } from "react-color";
 import { InputShownDispatchContext } from "./TagInputContext";
 import { useAppDispatch } from "@/store/hooks";
 
+const defaultColor = "#ff0000";
+
 const NewTagInput = ({
   hidden,
   parentTag,
   level,
 }: {
   hidden: boolean;
-  parentTag: EventTag;
+  parentTag: EventTag | null;
   level: number;
 }) => {
   const dispatch = useAppDispatch();
 
   const [colorPickerShown, setColorPickerShown] = useState(false);
-  const [pickedColor, setPickedColor] = useState(parentTag.color);
+  const [pickedColor, setPickedColor] = useState(
+    parentTag?.color ?? defaultColor
+  );
   const [newTagName, setNewTagName] = useState("");
 
   const handleColorChange = (color: ColorResult) => {
@@ -27,7 +31,7 @@ const NewTagInput = ({
   const dispatchGlobalInputShown = useContext(InputShownDispatchContext);
 
   const handleClose = () => {
-    setPickedColor(parentTag.color);
+    setPickedColor(parentTag?.color ?? defaultColor);
     setColorPickerShown(false);
     setNewTagName("");
     dispatchGlobalInputShown(false);
@@ -42,7 +46,7 @@ const NewTagInput = ({
         id: 0,
         name: newTagName,
         color: pickedColor,
-        parenttag: parentTag.id,
+        parenttag: parentTag?.id ?? null,
       })
     ).then(() => {
       dispatch(fetchTags());
