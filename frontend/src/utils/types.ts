@@ -1,8 +1,7 @@
-
 export interface Event {
-  startTimestamp: number,
-  durationMin: number,
-  description: string,
-  tagID?: number
+  id: number;
+  startTimestamp: number;
+  durationMin: number;
+  description: string;
+  tagID?: number;
 }
-

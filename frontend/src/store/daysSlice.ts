@@ -8,7 +8,7 @@ import type { RootState } from "./store";
 import { getMonthDays } from "@/utils/translateMonthNum";
 import client from "@/api/client";
 
-//TODO connect to API
+// Types, interfaces, constants
 
 export interface DayEvents {
   date: string;
@@ -19,6 +19,8 @@ const initialState: { selDayIdx: number | null; days: DayEvents[] } = {
   selDayIdx: null,
   days: [],
 };
+
+// Helper functions
 
 const fetchMonthHelper = async (month: number) => {
   let arr: DayEvents[] = [];
@@ -43,6 +45,7 @@ const fetchMonthHelper = async (month: number) => {
 
     arr[dayIdx].events = evts.map(
       (e: any): Event => ({
+        id: e.id,
         startTimestamp: new Date(arr[dayIdx].date).setUTCHours(
           e.start.split(":")[0],
           e.start.split(":")[1]
@@ -59,6 +62,61 @@ const fetchMonthHelper = async (month: number) => {
 
   return arr;
 };
+
+// Thunks
+
+export const addNewEvent = createAsyncThunk(
+  "days/addNewEvent",
+  async (event: Event, { getState }) => {
+    const state = getState() as RootState;
+    const selDayIdx = state.days.selDayIdx;
+    if (selDayIdx == null) return;
+
+    await client({
+      url: `/event`,
+      method: "post",
+      data: {
+        day: new Date(state.days.days[selDayIdx].date)
+          .toISOString()
+          .split("T")[0],
+        start: `${new Date(event.startTimestamp).getUTCHours()}:${new Date(
+          event.startTimestamp
+        ).getUTCMinutes()}:00`,
+        duration: `${Math.floor(event.durationMin / 60)}:${
+          event.durationMin % 60
+        }:00`,
+        description: event.description,
+        tag: event.tagID,
+      },
+    });
+
+    return event;
+  }
+);
+
+export const deleteEvent = createAsyncThunk(
+  "days/deleteEvent",
+  async (eventId: number) => {
+    await client({
+      url: `/event/${eventId}`,
+      method: "delete",
+    });
+    return eventId;
+  }
+);
+
+export const fetchMonth = createAsyncThunk("days/fetchMonth", fetchMonthHelper);
+
+export const updateMonth = createAsyncThunk(
+  "days/updateMonth",
+  async (_, { getState }) => {
+    const days = (getState() as RootState).days.days;
+    const currMonth = new Date(days[0].date).getUTCMonth();
+    return await fetchMonthHelper(currMonth);
+  }
+);
+
+// Slice
 
 export const daysSlice = createSlice({
   name: "days",
@@ -95,49 +153,10 @@ export const daysSlice = createSlice({
       })
       .addCase(addNewEvent.rejected, () => {
         console.error("Failed to add new event");
-      });
+      })
+      .addCase(deleteEvent.fulfilled, () => {});
   },
 });
-
-export const addNewEvent = createAsyncThunk(
-  "days/addNewEvent",
-  async (event: Event, { getState }) => {
-    const state = getState() as RootState;
-    const selDayIdx = state.days.selDayIdx;
-    if (selDayIdx == null) return;
-
-    await client({
-      url: `/event`,
-      method: "post",
-      data: {
-        day: new Date(state.days.days[selDayIdx].date)
-          .toISOString()
-          .split("T")[0],
-        start: `${new Date(event.startTimestamp).getUTCHours()}:${new Date(
-          event.startTimestamp
-        ).getUTCMinutes()}:00`,
-        duration: `${Math.floor(event.durationMin / 60)}:${
-          event.durationMin % 60
-        }:00`,
-        description: event.description,
-        tag: event.tagID,
-      },
-    });
-
-    return event;
-  }
-);
-
-export const fetchMonth = createAsyncThunk("days/fetchMonth", fetchMonthHelper);
-
-export const updateMonth = createAsyncThunk(
-  "days/updateMonth",
-  async (_, { getState }) => {
-    const days = (getState() as RootState).days.days;
-    const currMonth = new Date(days[0].date).getUTCMonth();
-    return await fetchMonthHelper(currMonth);
-  }
-);
 
 export default daysSlice.reducer;
 export const { setSelDay } = daysSlice.actions;

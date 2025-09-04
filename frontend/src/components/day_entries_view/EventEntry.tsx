@@ -1,9 +1,13 @@
 import { type Event } from "@/utils/types";
 import Button from "@/components/Button";
+import { deleteEvent, updateMonth } from "@/store/daysSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 //TODO 3-dot menu instead of buttons
 
 const EventEntry = ({ event }: { event: Event }) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">
       <div className="font-bold mb-1">{event.description}</div>
@@ -20,7 +24,7 @@ const EventEntry = ({ event }: { event: Event }) => {
         <Button
           type="danger"
           action={() => {
-            console.log("delete");
+            dispatch(deleteEvent(event.id)).then(() => dispatch(updateMonth()));
           }}
         >
           Delete

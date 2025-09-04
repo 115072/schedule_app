@@ -6,7 +6,7 @@ import {
 import type { RootState } from "@/store/store";
 import client from "@/api/client";
 
-//TODO connect to API
+// Types, interfaces, constants
 
 export type FILTER = "active" | "inactive" | "partial";
 
@@ -28,6 +28,8 @@ const initialState: TagsState = {
   selTagId: null,
   tags: [],
 };
+
+// Helper functions
 
 export function findTagById(id?: number, tags?: EventTag[]): EventTag | null {
   if (tags === undefined || id === undefined) return null;
@@ -62,6 +64,39 @@ function parseResponse(tags: any[]): EventTag[] {
   }));
 }
 
+// Thunks
+
+export const fetchTags = createAsyncThunk("tags/fetchTags", async () => {
+  const response = await client({ url: "/tags", method: "get" });
+  return parseResponse(response.data);
+});
+
+export const addNewTag = createAsyncThunk(
+  "tags/addNewTag",
+  async (tag: EventTag) => {
+    const response = await client({
+      url: "/tag",
+      method: "post",
+      data: {
+        name: tag.name,
+        hexcolor: tag.color,
+        parenttag: tag.parenttag ?? null,
+      },
+    });
+    return response.data.id;
+  }
+);
+
+export const deleteTag = createAsyncThunk(
+  "tags/deleteTag",
+  async (tagId: number) => {
+    await client({ url: `/tag/${tagId}`, method: "delete" });
+    return tagId;
+  }
+);
+
+// Slice
+
 export const tagsSlice = createSlice({
   name: "tags",
   initialState,
@@ -95,35 +130,6 @@ export const tagsSlice = createSlice({
       });
   },
 });
-
-export const fetchTags = createAsyncThunk("tags/fetchTags", async () => {
-  const response = await client({ url: "/tags", method: "get" });
-  return parseResponse(response.data);
-});
-
-export const addNewTag = createAsyncThunk(
-  "tags/addNewTag",
-  async (tag: EventTag) => {
-    const response = await client({
-      url: "/tag",
-      method: "post",
-      data: {
-        name: tag.name,
-        hexcolor: tag.color,
-        parenttag: tag.parenttag ?? null,
-      },
-    });
-    return response.data.id;
-  }
-);
-
-export const deleteTag = createAsyncThunk(
-  "tags/deleteTag",
-  async (tagId: number) => {
-    await client({ url: `/tag/${tagId}`, method: "delete" });
-    return tagId;
-  }
-);
 
 export default tagsSlice.reducer;
 export const { toggleFilter, setSelTag } = tagsSlice.actions;
