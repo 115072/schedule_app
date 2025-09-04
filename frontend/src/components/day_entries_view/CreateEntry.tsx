@@ -47,6 +47,7 @@ export default function CreateEntry() {
     dispatch(addNewEvent(newEvent));
     dispatch(setSelTag(null));
     reset();
+    setIsCreating(false);
   };
 
   const handleCancel = () => {
@@ -54,7 +55,7 @@ export default function CreateEntry() {
     setIsCreating(false);
   };
 
-  useEffect(handleCancel, [selDay, reset]);
+  useEffect(handleCancel, [selDay?.date, reset]);
 
   if (!isCreating) {
     return (
