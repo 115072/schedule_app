@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   deleteTag,
   fetchTags,
-  selectSelTag,
   selectSelTagId,
   setSelTag,
   type EventTag,
@@ -13,6 +12,7 @@ import {
   InputShownContext,
   InputShownDispatchContext,
 } from "./TagInputContext";
+import { updateMonth } from "@/store/daysSlice";
 
 const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
   const [inputShown, setInputShown] = useState(false);
@@ -70,9 +70,10 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
                 <li className="hover:bg-neutral-300">Edit</li>
                 <li
                   onClick={() => {
-                    dispatch(deleteTag(tag.id)).then(() =>
-                      dispatch(fetchTags())
-                    );
+                    dispatch(deleteTag(tag.id)).then(() => {
+                      dispatch(fetchTags());
+                      dispatch(updateMonth());
+                    });
                   }}
                   className="text-red-500 hover:bg-red-200"
                 >

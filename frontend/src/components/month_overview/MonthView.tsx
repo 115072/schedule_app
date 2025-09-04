@@ -9,11 +9,13 @@ const MonthView = () => {
   const [currMonth, setCurrMonth] = useState(new Date().getUTCMonth());
   const dispatch = useAppDispatch();
   const days = useAppSelector(selectDays);
+  // const tags = useAppSelector(selectTags);
 
   useEffect(() => {
-    dispatch(fetchMonth(currMonth));
-    if (currMonth === new Date().getUTCMonth())
-      dispatch(setSelDay(new Date().getUTCDate()));
+    dispatch(fetchMonth(currMonth)).then(() => {
+      if (currMonth === new Date().getUTCMonth())
+        dispatch(setSelDay(new Date().getUTCDate()));
+    });
   }, [currMonth, dispatch]);
 
   function prevMonth() {
