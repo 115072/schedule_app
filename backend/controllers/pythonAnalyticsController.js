@@ -22,3 +22,16 @@ export async function piechart(req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
+export async function scatter(req, res) {
+  try {
+    const response = await axios.post(
+      "http://python-analytics:8000/scatter",
+      req.body
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}

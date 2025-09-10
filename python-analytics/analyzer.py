@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 import os         # For reading environment variables
 import psycopg2   # For connecting to PostgreSQL
+import datetime
 from pydantic import BaseModel
 from typing import List 
 
@@ -39,8 +40,39 @@ async def root(dates: DateRequest):
         
         return piechartData
 
+
+class ScatterRequest(BaseModel):
+    tag_id: List[int]
+    start: str
+    end: str
+   # user: int 
+
+@app.post("/scatter")
+async def root(tags: ScatterRequest):
     
-    
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        sql_query = ("SELECT evententry.day, evententry.start,  evententry.duration, tag.name "
+        "FROM evententry JOIN tag ON evententry.tag = tag.id WHERE tag.id = ANY (%s::integer[])"
+        " AND evententry.day >= %s AND evententry.day <= %s")
+        parameters = (tags.tag_id,tags.start,tags.end,)
+        cursor.execute(sql_query,parameters)
+
+        result = cursor.fetchall()
+        conn.close()
+
+        scatterData = []
+
+        for x in result:
+            data = {
+                "x": (x[2].hour * 60) + x[2].minute,
+                "y": datetime.datetime.combine(x[0],x[1]).isoformat(),
+                "tag_name": x[3]
+            }
+            scatterData.append(data)
+
+        return scatterData
 
 
 def get_db_connection():
