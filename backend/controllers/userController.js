@@ -33,6 +33,7 @@ export async function postUser(req, res) {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const users = await makeUser({ ...req.body, password: hashedPassword });
+    delete users.password;
     res.json(users);
   } catch (error) {
     console.error("Error posting user:", error);

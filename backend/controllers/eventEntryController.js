@@ -41,7 +41,10 @@ export async function postEvent(req, res) {
 
 export async function putEventById(req, res) {
   try {
-    const event = await updateEventById({ id: req.params.id, ...req.body });
+    const oldEvent = await getEventById(req.params.id);
+    const request = req.body;
+    const newEvent = { ...oldEvent, ...request };
+    const event = await updateEventById(newEvent);
     res.json(event);
   } catch (error) {
     console.error("Error updating event:", error);

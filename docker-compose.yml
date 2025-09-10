@@ -49,5 +49,20 @@ services:
     depends_on:
       - postgres
 
+  python-analytics:
+    build: ./python-analytics
+    restart: always
+    volumes:
+      - ./python-analytics:/app
+    depends_on:
+      - postgres
+    ports:
+      - "8001:8000"
+    environment:
+      DB_USER: user
+      DB_PASS: passw
+      DB_NAME: db
+      DB_HOST: postgres
+
 volumes:
   pgdata:
