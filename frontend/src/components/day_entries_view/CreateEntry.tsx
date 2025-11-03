@@ -74,8 +74,6 @@ const CreateEntry = ({
     if (!defaultEvent) setIsCreating(false);
   };
 
-  useEffect(handleCancel, [selDay?.date, reset]);
-
   if (!isCreating) {
     return (
       <div

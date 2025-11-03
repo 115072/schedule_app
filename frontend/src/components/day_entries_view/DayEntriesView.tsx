@@ -21,7 +21,7 @@ const DayEntriesView = () => {
       <div className="flex flex-col gap-2">
         <CreateEntry></CreateEntry>
         {selDay?.events.map((event, i) => (
-          <EventEntry event={event} key={i}></EventEntry>
+          <EventEntry event={event} key={event.id}></EventEntry>
         ))}
       </div>
     </div>

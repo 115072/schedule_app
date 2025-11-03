@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import TagSelectTree from "./TagSelectTree";
-import { use, useEffect, useReducer } from "react";
-import { selectTags, fetchTags, selectSelTagId } from "@/store/tagsSlice";
+import { useEffect, useReducer } from "react";
+import { selectTags, selectSelTagId } from "@/store/tagsSlice";
 import {
   InputShownContext,
   InputShownDispatchContext,
@@ -11,7 +11,6 @@ import NewRootTagButton from "./NewRootTagButton";
 const TagSelectList = ({ onChange }: { onChange: any }) => {
   const tags = useAppSelector(selectTags);
   const selTagId = useAppSelector(selectSelTagId);
-  const dispatch = useAppDispatch();
 
   const [inputShown, inputShownDispatch] = useReducer(inputShownReducer, false);
 

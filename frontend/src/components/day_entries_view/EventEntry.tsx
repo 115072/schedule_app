@@ -43,9 +43,14 @@ const EventEntry = ({ event }: { event: Event }) => {
           </Button>
         </div>
       </div>
-      <div hidden={!isEditing}>
-        <CreateEntry defaultEvent={event} closeFn={() => setEditing(false)} />
-      </div>
+      {isEditing && (
+        <CreateEntry
+          defaultEvent={event}
+          closeFn={() => {
+            setEditing(false);
+          }}
+        />
+      )}
     </>
   );
 };
