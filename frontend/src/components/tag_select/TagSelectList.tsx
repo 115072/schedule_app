@@ -16,10 +16,6 @@ const TagSelectList = ({ onChange }: { onChange: any }) => {
   const [inputShown, inputShownDispatch] = useReducer(inputShownReducer, false);
 
   useEffect(() => {
-    dispatch(fetchTags());
-  }, []);
-
-  useEffect(() => {
     onChange(selTagId);
   }, [selTagId]);
 

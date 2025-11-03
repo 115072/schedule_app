@@ -3,8 +3,8 @@ import { getMonthName } from "@/utils/translateMonthNum";
 
 import DayBar from "@/components/month_overview/DayBar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchMonth, selectDays, selectFilteredDays, setSelDay } from "@/store/monthSlice";
-import { selectActiveFilterTagIds, selectTags } from "@/store/tagsSlice";
+import { fetchMonth, selectFilteredDays, setSelDay } from "@/store/monthSlice";
+import { selectActiveFilterTagIds } from "@/store/tagsSlice";
 
 const MonthView = () => {
   const [currMonth, setCurrMonth] = useState(new Date().getUTCMonth());

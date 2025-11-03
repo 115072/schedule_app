@@ -72,6 +72,18 @@ const getActiveFilterTagIds = (tags: EventTag[], ids: number[] = []) => {
   return ids;
 };
 
+const keepFilters = (
+  newTags: EventTag[],
+  filteredIds: number[]
+): EventTag[] => {
+  if (!newTags) return newTags;
+  return newTags.map((t) => ({
+    ...t,
+    filter: filteredIds.includes(t.id) ? "active" : "inactive",
+    children: t.children ? keepFilters(t.children, filteredIds) : undefined,
+  }));
+};
+
 // Thunks
 
 export const fetchTags = createAsyncThunk("tags/fetchTags", async () => {
@@ -121,7 +133,8 @@ export const tagsSlice = createSlice({
       .addCase(
         fetchTags.fulfilled,
         (state, action: PayloadAction<EventTag[]>) => {
-          return { ...state, tags: action.payload };
+          const filteredIds = getActiveFilterTagIds(state.tags);
+          return { ...state, tags: keepFilters(action.payload, filteredIds) };
         }
       )
       .addCase(

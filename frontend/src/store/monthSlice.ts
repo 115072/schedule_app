@@ -7,7 +7,6 @@ import {
 import type { RootState } from "./store";
 import { getMonthDays } from "@/utils/translateMonthNum";
 import client from "@/api/client";
-import type { EventTag } from "./tagsSlice";
 
 // Types, interfaces, constants
 
@@ -20,21 +19,6 @@ const initialState: { selDayIdx: number | null; days: DayEvents[] } = {
   selDayIdx: null,
   days: [],
 };
-
-// Helper functions
-
-// const filterEvents = (days: DayEvents[], tags: EventTag[]) => {
-//   const activeTagIds = getActiveFilterTagIds(tags);
-//   console.log(activeTagIds);
-//   if (activeTagIds.length === 0) return days;
-
-//   days.map((day) =>
-//     day.events.filter((e) => {
-//       e.tagID && activeTagIds.includes(e.tagID);
-//     })
-//   );
-//   return days;
-// };
 
 const fetchMonthHelper = async (month: number) => {
   let arr: DayEvents[] = [];
