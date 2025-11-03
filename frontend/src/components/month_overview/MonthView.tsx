@@ -3,13 +3,14 @@ import { getMonthName } from "@/utils/translateMonthNum";
 
 import DayBar from "@/components/month_overview/DayBar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchMonth, selectDays, setSelDay } from "@/store/daysSlice";
+import { fetchMonth, selectDays, selectFilteredDays, setSelDay } from "@/store/monthSlice";
+import { selectActiveFilterTagIds, selectTags } from "@/store/tagsSlice";
 
 const MonthView = () => {
   const [currMonth, setCurrMonth] = useState(new Date().getUTCMonth());
   const dispatch = useAppDispatch();
-  const days = useAppSelector(selectDays);
-  // const tags = useAppSelector(selectTags);
+  const filteredTagIds = useAppSelector(selectActiveFilterTagIds);
+  const days = useAppSelector(state => selectFilteredDays(state, filteredTagIds));
 
   useEffect(() => {
     dispatch(fetchMonth(currMonth)).then(() => {
@@ -38,8 +39,8 @@ const MonthView = () => {
         </a>
       </div>
       <div className="flex flex-col gap-2">
-        {days.days.map((_, i) => (
-          <DayBar day={days.days[i]} key={i}></DayBar>
+        {days.map((_, i) => (
+          <DayBar day={days[i]} key={i}></DayBar>
         ))}
       </div>
     </div>

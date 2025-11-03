@@ -2,7 +2,7 @@ import { getMonthName, getOrdinal } from "@/utils/translateMonthNum";
 import EventEntry from "./EventEntry";
 
 import { useAppSelector } from "@/store/hooks";
-import { selectSelDay } from "@/store/daysSlice";
+import { selectSelDay } from "@/store/monthSlice";
 import CreateEntry from "./CreateEntry";
 import TagFilterList from "../tags_filter/TagFilterList";
 

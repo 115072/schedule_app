@@ -1,6 +1,6 @@
 import { type Event } from "@/utils/types";
 import Button from "@/components/Button";
-import { deleteEvent, updateMonth } from "@/store/daysSlice";
+import { deleteEvent, updateMonth } from "@/store/monthSlice";
 import { useAppDispatch } from "@/store/hooks";
 import CreateEntry from "./CreateEntry";
 import { useState } from "react";

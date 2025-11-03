@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <header className="bg-neutral-300 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 fixed top-0 left-0 right-0 flex items-center z-10">
-      <h1 className="font-bold text-4xl m-4 w-full">Our Schedule App</h1>
+      <h1 className="text-3xl m-4 w-full">Schedule App</h1>
       <button
         onClick={toggleTheme}
         className="bg-brand-600 text-brand-900 m-4 p-2 rounded-sm cursor-pointer"

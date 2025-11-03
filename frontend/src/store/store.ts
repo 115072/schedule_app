@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tagsReducer from "@/store/tagsSlice";
-import daysReducer from "@/store/daysSlice";
+import monthReducer from "@/store/monthSlice";
 
 export const store = configureStore({
   reducer: {
     tags: tagsReducer,
-    days: daysReducer,
+    month: monthReducer,
   },
 });
 

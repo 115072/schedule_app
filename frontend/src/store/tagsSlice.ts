@@ -64,6 +64,14 @@ function parseResponse(tags: any[]): EventTag[] {
   }));
 }
 
+const getActiveFilterTagIds = (tags: EventTag[], ids: number[] = []) => {
+  tags.forEach((t) => {
+    if (t.filter === "active") ids.push(t.id);
+    if (t.children) ids = getActiveFilterTagIds(t.children, ids);
+  });
+  return ids;
+};
+
 // Thunks
 
 export const fetchTags = createAsyncThunk("tags/fetchTags", async () => {
@@ -138,3 +146,6 @@ export const selectTags = (state: RootState) => state.tags.tags;
 export const selectSelTag = (state: RootState) =>
   findTagById(state.tags.selTagId ?? undefined, state.tags.tags);
 export const selectSelTagId = (state: RootState) => state.tags.selTagId;
+export const selectActiveFilterTagIds = (state: RootState) => {
+  return getActiveFilterTagIds(state.tags.tags);
+};

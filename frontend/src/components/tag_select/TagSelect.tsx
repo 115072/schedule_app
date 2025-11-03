@@ -12,7 +12,7 @@ import {
   InputShownContext,
   InputShownDispatchContext,
 } from "./TagInputContext";
-import { updateMonth } from "@/store/daysSlice";
+import { updateMonth } from "@/store/monthSlice";
 
 const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
   const [inputShown, setInputShown] = useState(false);
@@ -46,10 +46,10 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
           style={{ marginLeft: level * 28 }}
         >
           <div
-            className="size-5 rounded-xs"
+            className="size-5 min-w-5 min-h-5 rounded-xs"
             style={{ backgroundColor: tag.color }}
           ></div>
-          <div>{tag.name}</div>
+          <div className="line-clamp-1">{tag.name}</div>
         </div>
         <div className="flex flex-row">
           <div onMouseLeave={() => setMenuShown(false)} className="relative">
@@ -58,7 +58,7 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
                 e.stopPropagation();
                 setMenuShown(!menuShown);
               }}
-              className="not-group-hover:invisible group-hover:visible hover:bg-neutral-400 flex items-center group/tooltip"
+              className="not-group-hover:hidden group-hover:visible hover:bg-neutral-400 flex items-center group/tooltip"
             >
               <span className="material-symbols-outlined">more_vert</span>
             </div>
@@ -67,7 +67,7 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
               className="absolute right-0 z-30 bg-neutral-200 shadow-md"
             >
               <ul className="*:min-w-24 *:text-right *:px-2">
-                <li className="hover:bg-neutral-300">Edit</li>
+                <li className="hover:bg-neutral-300 text-neutral-900">Edit</li>
                 <li
                   onClick={() => {
                     dispatch(deleteTag(tag.id)).then(() => {
@@ -90,7 +90,7 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
                 dispatchGlobalInputShown(true);
               }
             }}
-            className="not-group-hover:invisible group-hover:visible hover:bg-neutral-400 flex items-center"
+            className="not-group-hover:hidden group-hover:visible hover:bg-neutral-400 flex items-center"
           >
             <span className="material-symbols-outlined">add</span>
           </div>

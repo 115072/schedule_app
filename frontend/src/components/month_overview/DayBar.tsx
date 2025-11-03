@@ -1,4 +1,4 @@
-import { setSelDay, type DayEvents } from "@/store/daysSlice";
+import { setSelDay, type DayEvents } from "@/store/monthSlice";
 import { useAppDispatch } from "@/store/hooks";
 import type { Event } from "@/utils/types";
 import TimelineFraction from "./TimelineFraction";

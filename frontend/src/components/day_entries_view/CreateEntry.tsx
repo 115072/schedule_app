@@ -7,7 +7,7 @@ import {
   selectSelDay,
   updateEvent,
   updateMonth,
-} from "@/store/daysSlice";
+} from "@/store/monthSlice";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import type { Event } from "@/utils/types";

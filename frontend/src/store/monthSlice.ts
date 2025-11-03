@@ -7,6 +7,7 @@ import {
 import type { RootState } from "./store";
 import { getMonthDays } from "@/utils/translateMonthNum";
 import client from "@/api/client";
+import type { EventTag } from "./tagsSlice";
 
 // Types, interfaces, constants
 
@@ -21,6 +22,19 @@ const initialState: { selDayIdx: number | null; days: DayEvents[] } = {
 };
 
 // Helper functions
+
+// const filterEvents = (days: DayEvents[], tags: EventTag[]) => {
+//   const activeTagIds = getActiveFilterTagIds(tags);
+//   console.log(activeTagIds);
+//   if (activeTagIds.length === 0) return days;
+
+//   days.map((day) =>
+//     day.events.filter((e) => {
+//       e.tagID && activeTagIds.includes(e.tagID);
+//     })
+//   );
+//   return days;
+// };
 
 const fetchMonthHelper = async (month: number) => {
   let arr: DayEvents[] = [];
@@ -69,14 +83,14 @@ export const addNewEvent = createAsyncThunk(
   "days/addNewEvent",
   async (event: Event, { getState }) => {
     const state = getState() as RootState;
-    const selDayIdx = state.days.selDayIdx;
+    const selDayIdx = state.month.selDayIdx;
     if (selDayIdx == null) return;
 
     await client({
       url: `/event`,
       method: "post",
       data: {
-        day: new Date(state.days.days[selDayIdx].date)
+        day: new Date(state.month.days[selDayIdx].date)
           .toISOString()
           .split("T")[0],
         start: `${new Date(event.startTimestamp).getUTCHours()}:${new Date(
@@ -135,7 +149,7 @@ export const fetchMonth = createAsyncThunk("days/fetchMonth", fetchMonthHelper);
 export const updateMonth = createAsyncThunk(
   "days/updateMonth",
   async (_, { getState }) => {
-    const days = (getState() as RootState).days.days;
+    const days = (getState() as RootState).month.days;
     const currMonth = new Date(days[0].date).getUTCMonth();
     return await fetchMonthHelper(currMonth);
   }
@@ -143,8 +157,8 @@ export const updateMonth = createAsyncThunk(
 
 // Slice
 
-export const daysSlice = createSlice({
-  name: "days",
+export const monthSlice = createSlice({
+  name: "month",
   initialState,
   reducers: {
     setSelDay: (state, action: PayloadAction<number>) => {
@@ -178,14 +192,28 @@ export const daysSlice = createSlice({
   },
 });
 
-export default daysSlice.reducer;
-export const { setSelDay } = daysSlice.actions;
+export default monthSlice.reducer;
+export const { setSelDay } = monthSlice.actions;
 
-export const selectDays = (state: RootState) => state.days;
+export const selectDays = (state: RootState) => state.month.days;
 export const selectSelDay = (state: RootState) => {
-  if (state.days.selDayIdx != null) {
-    return state.days.days[state.days.selDayIdx];
+  if (state.month.selDayIdx != null) {
+    return state.month.days[state.month.selDayIdx];
   } else {
     return null;
   }
+};
+
+export const selectFilteredDays = (
+  state: RootState,
+  filteredTagIds: number[]
+) => {
+  if (filteredTagIds.length === 0) return state.month.days;
+
+  return state.month.days.map((day) => ({
+    ...day,
+    events: day.events.filter(
+      (e) => e.tagID && filteredTagIds.includes(e.tagID)
+    ),
+  }));
 };

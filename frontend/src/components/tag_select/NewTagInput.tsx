@@ -65,7 +65,7 @@ const NewTagInput = ({
       >
         <div
           onClick={() => setColorPickerShown(!colorPickerShown)}
-          className="size-5 rounded-xs hover:cursor-pointer"
+          className="size-5 min-w-5 max-w-5 rounded-xs hover:cursor-pointer"
           style={{ backgroundColor: pickedColor }}
         ></div>
         <input
