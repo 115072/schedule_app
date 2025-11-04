@@ -1,8 +1,8 @@
 import { type Event } from "@/utils/types";
 import Button from "@/components/Button";
 import { deleteEvent, updateMonth } from "@/store/monthSlice";
-import { useAppDispatch } from "@/store/hooks";
-import { setSelTagId } from "@/store/tagsSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectTagById } from "@/store/tagsSlice";
 
 //TODO 3-dot menu instead of buttons
 
@@ -15,10 +15,19 @@ const EventEntry = ({
 }) => {
   const dispatch = useAppDispatch();
 
+  const tag = useAppSelector((state) => selectTagById(state, event.tagID));
+
   return (
     <>
       <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">
         <div className="font-bold mb-1">{event.description}</div>
+        <div className="flex flex-row items-center gap-1">
+          <div
+            className="size-5 min-w-5 min-h-5 rounded-xs"
+            style={{ backgroundColor: tag?.color }}
+          ></div>
+          <div className="line-clamp-1">{tag?.name}</div>
+        </div>
         <div>Started: {new Date(event.startTimestamp).toUTCString()}</div>
         <div>Duration: {event.durationMin}min</div>
         <div className="flex flex-row justify-end gap-4">

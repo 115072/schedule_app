@@ -162,3 +162,7 @@ export const selectSelTagId = (state: RootState) => state.tags.selTagId;
 export const selectActiveFilterTagIds = (state: RootState) => {
   return getActiveFilterTagIds(state.tags.tags);
 };
+export const selectTagById = (state: RootState, id?: number) => {
+  if (!id) return null;
+  return findTagById(id, state.tags.tags);
+};
