@@ -55,8 +55,8 @@ export default function TimelineFraction({ events }: { events: Event[] }) {
             opacity: visible ? 1 : 0,
           }}
         >
-          {events.map((e) => {
-            return <div>{e.description}</div>;
+          {events.map((e, i) => {
+            return <div key={i}>{e.description}</div>;
           })}
         </div>
       ) : null}
