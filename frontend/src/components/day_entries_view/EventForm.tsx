@@ -63,7 +63,6 @@ const CreateEntry = ({
 }) => {
   const selDay = useAppSelector(selectSelDay);
   const dispatch = useAppDispatch();
-  const [isCreating, setIsCreating] = useState(defaultEvent ? true : false);
 
   // Default states for controlled inputs
   const defaultStartTime: string | "" = defaultEvent
@@ -85,7 +84,19 @@ const CreateEntry = ({
     watch,
     setValue,
     clearErrors,
-  } = useForm<FormFields>({ resolver: zodResolver(schema) });
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      description: defaultEvent?.description ?? "",
+      startTime: defaultStartTime,
+      endTime: defaultEndTime,
+      durationMin: defaultDurationMin,
+    },
+  });
+
+  useEffect(() => {
+    dispatch(setSelTagId(defaultEvent?.tagID || null));
+  }, []);
 
   // Watch inputs
   const startTime = watch("startTime", defaultStartTime);
@@ -97,9 +108,13 @@ const CreateEntry = ({
 
   useEffect(() => {
     if (useDuration) {
-      setValue("endTime", durationToEndTime(startTime, durationMin));
+      setValue("endTime", durationToEndTime(startTime, durationMin), {
+        shouldValidate: true,
+      });
     } else {
-      setValue("durationMin", endTimeToDuration(startTime, endTime) || 0);
+      setValue("durationMin", endTimeToDuration(startTime, endTime) || 0, {
+        shouldValidate: true,
+      });
     }
   }, [startTime, endTime, durationMin]);
 
@@ -107,7 +122,6 @@ const CreateEntry = ({
     if (closeFn) closeFn();
     reset();
     clearErrors();
-    if (!defaultEvent) setIsCreating(false);
   };
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
@@ -127,19 +141,6 @@ const CreateEntry = ({
 
     handleCancel();
   };
-
-  if (!isCreating) {
-    return (
-      <div
-        onClick={() => {
-          setIsCreating(true);
-        }}
-        className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm cursor-pointer min-h-24 content-center font-bold text-xl"
-      >
-        Create new entry
-      </div>
-    );
-  }
 
   return (
     <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">

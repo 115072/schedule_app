@@ -3,11 +3,21 @@ import EventEntry from "./EventEntry";
 
 import { useAppSelector } from "@/store/hooks";
 import { selectSelDay } from "@/store/monthSlice";
-import CreateEntry from "./CreateEntry";
+import EventForm from "./EventForm";
 import TagFilterList from "../tags_filter/TagFilterList";
+import { useEffect, useState } from "react";
+import type { Event } from "@/utils/types";
 
 const DayEntriesView = () => {
   const selDay = useAppSelector(selectSelDay);
+
+  const [showForm, setShowForm] = useState(false);
+  const [defaultEvent, setDefaultEvent] = useState<Event | null>(null);
+
+  useEffect(() => {
+    setShowForm(false);
+    setDefaultEvent(null);
+  }, [selDay]);
 
   return (
     <div className="w-[30vw] px-4 h-[80dvh] overflow-scroll sticky top-24">
@@ -18,12 +28,35 @@ const DayEntriesView = () => {
           {getMonthName(new Date(selDay ? selDay.date : Date()).getUTCMonth())}
         </span>
       </div>
-      <div className="flex flex-col gap-2">
-        <CreateEntry></CreateEntry>
-        {selDay?.events.map((event, i) => (
-          <EventEntry event={event} key={event.id}></EventEntry>
-        ))}
-      </div>
+      {showForm ? (
+        <EventForm
+          defaultEvent={defaultEvent}
+          closeFn={() => {
+            setShowForm(false);
+          }}
+        ></EventForm>
+      ) : (
+        <div className="flex flex-col gap-2">
+          <div
+            onClick={() => {
+              setShowForm(true);
+            }}
+            className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm cursor-pointer min-h-24 content-center font-bold text-xl"
+          >
+            Create new entry
+          </div>
+          {selDay?.events.map((event, i) => (
+            <EventEntry
+              event={event}
+              onEdit={() => {
+                setDefaultEvent(event);
+                setShowForm(true);
+              }}
+              key={event.id}
+            ></EventEntry>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
