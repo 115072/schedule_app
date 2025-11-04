@@ -20,6 +20,12 @@ const initialState: { selDayIdx: number | null; days: DayEvents[] } = {
   days: [],
 };
 
+const sortEvents = (events: Event[]): Event[] => {
+  return events.sort((a, b) => {
+    return a.startTimestamp - b.startTimestamp;
+  });
+};
+
 const fetchMonthHelper = async (month: number) => {
   let arr: DayEvents[] = [];
   for (let i = 1; i <= getMonthDays(month); i++) {
@@ -56,6 +62,8 @@ const fetchMonthHelper = async (month: number) => {
         tagID: e.tag,
       })
     );
+
+    arr[dayIdx].events = sortEvents(arr[dayIdx].events);
   }
 
   return arr;
