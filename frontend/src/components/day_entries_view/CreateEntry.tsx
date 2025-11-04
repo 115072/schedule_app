@@ -14,15 +14,42 @@ import type { Event } from "@/utils/types";
 import TagSelectList from "../tag_select/TagSelectList";
 import { setSelTagId } from "@/store/tagsSlice";
 
+//TODO only single form open
+
+// Helper functions
+const durationToEndTime = (startTime: string, durationMin: number): string => {
+  if (startTime === "") return "";
+  const [startHours, startMinutes] = startTime.split(":");
+  const endTime = Number(startHours) * 60 + Number(startMinutes) + durationMin;
+  const endHours = Math.floor(endTime / 60);
+  const endMinutes = endTime % 60;
+  if (endHours >= 24) return "23:59";
+  return `${endHours.toString().padStart(2, "0")}:${endMinutes
+    .toString()
+    .padStart(2, "0")}`;
+};
+
+const endTimeToDuration = (startTime: string, endTime: string): number => {
+  if (startTime === "" || endTime === "") return 0;
+  const [startHours, startMinutes] = startTime.split(":");
+  const [endHours, endMinutes] = endTime.split(":");
+  const durationMin =
+    Number(endHours) * 60 +
+    Number(endMinutes) -
+    (Number(startHours) * 60 + Number(startMinutes));
+  return durationMin > 0 ? durationMin : 0;
+};
+
+// Form schema
 const schema = z.object({
   description: z.string().nonempty({ error: "Please provide a description" }),
-  startTime: z.iso.time({ error: "Invalid time format" }),
+  startTime: z.iso.time({ error: "Define a start time" }),
+  endTime: z.iso.time({ error: "Define an end time" }),
   durationMin: z
-    .int({ error: "Please provide the duration in minutes" })
-    .positive({ error: "The duration must be a positive number" }),
-  tagId: z
-    .number({ error: "Please select a tag" })
-    .nonoptional({ error: "Please select a tag" }),
+    .number({ error: "Invalid input type" })
+    .int({ error: "Invalid number type" })
+    .positive({ error: "Provide a valid duration" }),
+  tagId: z.number({ error: "Please select a tag" }),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -38,13 +65,50 @@ const CreateEntry = ({
   const dispatch = useAppDispatch();
   const [isCreating, setIsCreating] = useState(defaultEvent ? true : false);
 
+  // Default states for controlled inputs
+  const defaultStartTime: string | "" = defaultEvent
+    ? new Date(defaultEvent.startTimestamp).toISOString().substring(11, 16)
+    : "";
+  const defaultEndTime: string | "" = durationToEndTime(
+    defaultStartTime,
+    defaultEvent?.durationMin || 0
+  );
+  const defaultDurationMin: number | undefined =
+    defaultEvent?.durationMin || undefined;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     control,
+    watch,
+    setValue,
+    clearErrors,
   } = useForm<FormFields>({ resolver: zodResolver(schema) });
+
+  // Watch inputs
+  const startTime = watch("startTime", defaultStartTime);
+  const endTime = watch("endTime", defaultEndTime);
+  const durationMin = watch("durationMin", defaultDurationMin);
+
+  // // Controlled input states
+  const [useDuration, setUseDuration] = useState(false);
+
+  useEffect(() => {
+    if (useDuration) {
+      setValue("endTime", durationToEndTime(startTime, durationMin));
+    } else {
+      setValue("durationMin", endTimeToDuration(startTime, endTime) || 0);
+    }
+  }, [startTime, endTime, durationMin]);
+
+  const handleCancel = () => {
+    if (closeFn) closeFn();
+    reset();
+    clearErrors();
+    if (!defaultEvent) setIsCreating(false);
+  };
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     if (!selDay) return;
@@ -61,17 +125,7 @@ const CreateEntry = ({
     else dispatch(updateEvent(newEvent)).then(() => dispatch(updateMonth()));
     dispatch(setSelTagId(null));
 
-    if (closeFn) closeFn();
-    reset();
-    if (!defaultEvent) setIsCreating(false);
-
-    console.log("onSubmit ran");
-  };
-
-  const handleCancel = () => {
-    if (closeFn) closeFn();
-    reset();
-    if (!defaultEvent) setIsCreating(false);
+    handleCancel();
   };
 
   if (!isCreating) {
@@ -87,45 +141,66 @@ const CreateEntry = ({
     );
   }
 
-  //TODO add labels
   return (
     <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <input
-          className="border-2 px-2 rounded-sm"
-          {...register("description")}
-          placeholder="Description"
-          defaultValue={defaultEvent?.description}
-        />
-        {errors.description && (
-          <p className="text-red-500">{errors.description.message}</p>
-        )}
-        <input
-          className="border-2 px-2 rounded-sm"
-          {...register("startTime")}
-          type="time"
-          placeholder="Start Time"
-          defaultValue={
-            defaultEvent
-              ? new Date(defaultEvent.startTimestamp)
-                  .toISOString()
-                  .substring(11, 16)
-              : undefined
-          }
-        />
-        {errors.startTime && (
-          <p className="text-red-500">{errors.startTime.message}</p>
-        )}
-        <input
-          className="border-2 px-2 rounded-sm"
-          {...register("durationMin", { valueAsNumber: true })}
-          type="number"
-          placeholder="Duration in Minutes"
-          defaultValue={defaultEvent?.durationMin}
-        />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+        noValidate
+      >
+        <div className="flex flex-col">
+          <label htmlFor="">Description</label>
+          <input
+            className="border-2 px-2 rounded-sm"
+            {...register("description")}
+            defaultValue={defaultEvent?.description}
+          />
+          {errors.description && (
+            <p className="text-red-500">{errors.description.message}</p>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="">Start time</label>
+          <input
+            className="border-2 px-2 rounded-sm"
+            {...register("startTime")}
+            type="time"
+          />
+          {errors.startTime && (
+            <p className="text-red-500">{errors.startTime.message}</p>
+          )}
+        </div>
+        <div hidden={useDuration} className="flex flex-col">
+          <label htmlFor="">End time</label>
+          <input
+            className="border-2 px-2 rounded-sm"
+            {...register("endTime")}
+            type="time"
+          />
+          {errors.endTime && (
+            <p className="text-red-500">{errors.endTime.message}</p>
+          )}
+        </div>
+        <div hidden={!useDuration} className="flex flex-col">
+          <label htmlFor="">Duration in minutes</label>
+          <input
+            className="border-2 px-2 rounded-sm"
+            {...register("durationMin", { valueAsNumber: true })}
+            type="number"
+          />
+        </div>
         {errors.durationMin && (
           <p className="text-red-500">{errors.durationMin.message}</p>
         )}
+        <span>
+          <input
+            type="checkbox"
+            checked={useDuration}
+            onChange={(e) => setUseDuration(e.target.checked)}
+          />
+          <span className="pl-2">Use duration</span>
+        </span>
+
         <Controller
           name="tagId"
           control={control}
