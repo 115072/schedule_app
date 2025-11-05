@@ -44,15 +44,9 @@ export default function TimelineFraction({
           gridTemplateRows,
         }}
       >
-        {events.map((e, idx) => {
-          const clr = useAppSelector((s) => selectTagById(s, e.tagID))?.color;
-          return (
-            <div
-              style={{ backgroundColor: clr ? clr : "#00000000" }}
-              key={idx}
-            ></div>
-          );
-        })}
+        {events.map((e, i) => (
+          <Block event={e} key={i} />
+        ))}
       </div>
       <div
         ref={tooltipRef}
@@ -63,17 +57,26 @@ export default function TimelineFraction({
           opacity: visible ? 1 : 0,
         }}
       >
-        {events.map((e, i) => {
-          const clr = useAppSelector((s) => selectTagById(s, e.tagID))?.color;
-          return (
-            <span className="flex flex-row gap-2 items-center" key={i}>
-              <TagBadge color={clr} />
-              <span className="truncate">{e.description}</span>
-            </span>
-          );
-        })}
+        {events.map((e, i) => (
+          <TooltipRow event={e} key={i} />
+        ))}
         <span className="font-light">{timePos}</span>
       </div>
     </div>
   );
 }
+
+const Block = ({ event }: { event: Event }) => {
+  const clr = useAppSelector((s) => selectTagById(s, event.tagID))?.color;
+  return <div style={{ backgroundColor: clr ? clr : "#00000000" }}></div>;
+};
+
+const TooltipRow = ({ event }: { event: Event }) => {
+  const clr = useAppSelector((s) => selectTagById(s, event.tagID))?.color;
+  return (
+    <span className="flex flex-row gap-2 items-center">
+      <TagBadge color={clr} />
+      <span className="truncate">{event.description}</span>
+    </span>
+  );
+};

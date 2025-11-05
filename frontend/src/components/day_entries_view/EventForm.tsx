@@ -8,7 +8,12 @@ import {
   updateEvent,
   updateMonth,
 } from "@/store/monthSlice";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import {
+  Controller,
+  useForm,
+  type FieldError,
+  type SubmitHandler,
+} from "react-hook-form";
 import { z } from "zod";
 import type { Event } from "@/utils/types";
 import TagSelectList from "../tag_select/TagSelectList";
@@ -96,6 +101,7 @@ const CreateEntry = ({
 
   useEffect(() => {
     dispatch(setSelTagId(defaultEvent?.tagID || null));
+    clearErrors();
   }, []);
 
   // Watch inputs
@@ -111,8 +117,8 @@ const CreateEntry = ({
       setValue("endTime", durationToEndTime(startTime, durationMin), {
         shouldValidate: true,
       });
-    } else {
-      setValue("durationMin", endTimeToDuration(startTime, endTime) || 0, {
+    } else if (endTime !== "") {
+      setValue("durationMin", endTimeToDuration(startTime, endTime), {
         shouldValidate: true,
       });
     }
@@ -146,7 +152,7 @@ const CreateEntry = ({
     <div className="bg-neutral-200 dark:bg-neutral-800 p-3 rounded-sm">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-2"
         noValidate
       >
         <div className="flex flex-col">
@@ -156,9 +162,7 @@ const CreateEntry = ({
             {...register("description")}
             defaultValue={defaultEvent?.description}
           />
-          {errors.description && (
-            <p className="text-red-500">{errors.description.message}</p>
-          )}
+          <Err field={errors.description} />
         </div>
         <div className="flex flex-col">
           <label htmlFor="">Start time</label>
@@ -167,32 +171,28 @@ const CreateEntry = ({
             {...register("startTime")}
             type="time"
           />
-          {errors.startTime && (
-            <p className="text-red-500">{errors.startTime.message}</p>
-          )}
+          <Err field={errors.startTime} />
         </div>
-        <div hidden={useDuration} className="flex flex-col">
-          <label htmlFor="">End time</label>
-          <input
-            className="border-2 px-2 rounded-sm"
-            {...register("endTime")}
-            type="time"
-          />
-          {errors.endTime && (
-            <p className="text-red-500">{errors.endTime.message}</p>
-          )}
+        <div>
+          <div hidden={useDuration} className="flex flex-col">
+            <label htmlFor="">End time</label>
+            <input
+              className="border-2 px-2 rounded-sm"
+              {...register("endTime")}
+              type="time"
+            />
+            <Err field={errors.endTime} />
+          </div>
+          <div hidden={!useDuration} className="flex flex-col">
+            <label htmlFor="">Duration in minutes</label>
+            <input
+              className="border-2 px-2 rounded-sm"
+              {...register("durationMin", { valueAsNumber: true })}
+              type="number"
+            />
+          </div>
+          <Err field={errors.durationMin} />
         </div>
-        <div hidden={!useDuration} className="flex flex-col">
-          <label htmlFor="">Duration in minutes</label>
-          <input
-            className="border-2 px-2 rounded-sm"
-            {...register("durationMin", { valueAsNumber: true })}
-            type="number"
-          />
-        </div>
-        {errors.durationMin && (
-          <p className="text-red-500">{errors.durationMin.message}</p>
-        )}
         <span>
           <input
             type="checkbox"
@@ -209,9 +209,7 @@ const CreateEntry = ({
           render={({ field }) => (
             <>
               <TagSelectList {...field} />
-              {errors.tagId && (
-                <p className="text-red-500">{errors.tagId.message}</p>
-              )}
+              <Err field={errors.tagId} />
             </>
           )}
         />
@@ -224,6 +222,10 @@ const CreateEntry = ({
       </form>
     </div>
   );
+};
+
+const Err = ({ field }: { field?: FieldError }) => {
+  return field && <div className="text-red-500 text-sm">{field?.message}</div>;
 };
 
 export default CreateEntry;
