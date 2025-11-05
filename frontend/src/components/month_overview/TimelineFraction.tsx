@@ -1,7 +1,8 @@
 import { useAppSelector } from "@/store/hooks";
-import { findTagById, selectTags } from "@/store/tagsSlice";
 import type { Event } from "@/utils/types";
 import { useRef, useState } from "react";
+import TagBadge from "../TagBadge";
+import { selectTagById } from "@/store/tagsSlice";
 
 export default function TimelineFraction({
   events,
@@ -10,7 +11,6 @@ export default function TimelineFraction({
   events: Event[];
   timePos: string;
 }) {
-  const tags = useAppSelector(selectTags);
   const gridTemplateRows = events.map(() => "1fr").join(" ");
 
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -24,7 +24,10 @@ export default function TimelineFraction({
     const x: number = e.clientX - rect.left;
 
     setPos({
-      x: rect.left + x - (tooltipRef.current?.offsetWidth || 0) / 2,
+      x: Math.max(
+        8,
+        rect.left + x - (tooltipRef.current?.offsetWidth || 0) / 2
+      ),
       y: rect.top - (tooltipRef.current?.offsetHeight || 0) - 8,
     });
   };
@@ -42,7 +45,7 @@ export default function TimelineFraction({
         }}
       >
         {events.map((e, idx) => {
-          const clr = findTagById(e.tagID, tags)?.color;
+          const clr = useAppSelector((s) => selectTagById(s, e.tagID))?.color;
           return (
             <div
               style={{ backgroundColor: clr ? clr : "#00000000" }}
@@ -53,7 +56,7 @@ export default function TimelineFraction({
       </div>
       <div
         ref={tooltipRef}
-        className="fixed pointer-events-none p-2 bg-neutral-100 text-neutral-900 shadow-lg shadow-[rgba(0,0,0,0.50)] rounded-sm"
+        className="fixed pointer-events-none p-2 bg-neutral-100 text-neutral-900 shadow-lg shadow-[rgba(0,0,0,0.50)] rounded-sm flex flex-col gap-2 max-w-64"
         style={{
           left: pos.x,
           top: pos.y,
@@ -61,7 +64,13 @@ export default function TimelineFraction({
         }}
       >
         {events.map((e, i) => {
-          return <div key={i}>{e.description}</div>;
+          const clr = useAppSelector((s) => selectTagById(s, e.tagID))?.color;
+          return (
+            <span className="flex flex-row gap-2 items-center" key={i}>
+              <TagBadge color={clr} />
+              <span className="truncate">{e.description}</span>
+            </span>
+          );
         })}
         <span className="font-light">{timePos}</span>
       </div>

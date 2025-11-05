@@ -1,5 +1,6 @@
 import { useAppDispatch } from "@/store/hooks";
 import { toggleFilter, type EventTag } from "@/store/tagsSlice";
+import TagBadge from "../TagBadge";
 // import { useState } from "react";
 
 const TagFilter = ({
@@ -30,10 +31,7 @@ const TagFilter = ({
         className="flex flex-row items-center gap-1"
         style={{ marginLeft: level * 24 }}
       >
-        <div
-          className="size-4 rounded-xs"
-          style={{ backgroundColor: tag.color }}
-        ></div>
+        <TagBadge color={tag.color} />
         <div>{tag.name}</div>
       </div>
     </div>

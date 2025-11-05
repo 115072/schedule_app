@@ -13,6 +13,7 @@ import {
   InputShownDispatchContext,
 } from "./TagInputContext";
 import { updateMonth } from "@/store/monthSlice";
+import TagBadge from "../TagBadge";
 
 const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
   const [inputShown, setInputShown] = useState(false);
@@ -45,10 +46,7 @@ const TagSelect = ({ tag, level = 0 }: { tag: EventTag; level?: number }) => {
           className="flex flex-row items-center gap-1"
           style={{ marginLeft: level * 28 }}
         >
-          <div
-            className="size-5 min-w-5 min-h-5 rounded-xs"
-            style={{ backgroundColor: tag.color }}
-          ></div>
+          <TagBadge color={tag.color} />
           <div className="line-clamp-1">{tag.name}</div>
         </div>
         <div className="flex flex-row">
