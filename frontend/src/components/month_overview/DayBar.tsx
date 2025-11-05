@@ -2,6 +2,7 @@ import { setSelDay, type DayEvents } from "@/store/monthSlice";
 import { useAppDispatch } from "@/store/hooks";
 import type { Event } from "@/utils/types";
 import TimelineFraction from "./TimelineFraction";
+import { useRef, useState } from "react";
 
 //TODO filter by tags
 //TODO timeline hover tooltip
@@ -52,18 +53,41 @@ const DayBar = ({ day }: { day: DayEvents }) => {
   const timeFracs = calcTimeFractions(day);
   const gridTemplateColumns = timeFracs.map((tf) => `${tf.fr}fr`).join(" ");
 
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const [mousePosTime, setMousePosTime] = useState("");
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const posX: number = (e.clientX - rect.left) / rect.width;
+
+    const mins = Math.floor(posX * 24 * 60);
+    const time: string = `${String(Math.floor(mins / 60)).padStart(
+      2,
+      "0"
+    )}:${String(Math.floor(mins % 60)).padStart(2, "0")}`;
+
+    setMousePosTime(time);
+  };
+
   return (
     <div className="grid grid-cols-[1.5rem_auto] gap-2 items-center transition-all hover:font-bold min-h-10 cursor-pointer">
       <a className="text-end text-xl">{new Date(day.date).getUTCDate()}</a>
       <div
+        ref={triggerRef}
         className="grid bg-neutral-200 dark:bg-neutral-800 rounded-sm h-full"
         onClick={() => dispatch(setSelDay(new Date(day.date).getUTCDate()))}
+        onMouseMove={handleMouseMove}
         style={{
           gridTemplateColumns,
         }}
       >
         {timeFracs.map((tf, idx) => (
-          <TimelineFraction events={tf.events} key={idx}></TimelineFraction>
+          <TimelineFraction
+            events={tf.events}
+            timePos={mousePosTime}
+            key={idx}
+          ></TimelineFraction>
         ))}
       </div>
     </div>

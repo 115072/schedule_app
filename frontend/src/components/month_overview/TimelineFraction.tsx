@@ -3,7 +3,13 @@ import { findTagById, selectTags } from "@/store/tagsSlice";
 import type { Event } from "@/utils/types";
 import { useRef, useState } from "react";
 
-export default function TimelineFraction({ events }: { events: Event[] }) {
+export default function TimelineFraction({
+  events,
+  timePos,
+}: {
+  events: Event[];
+  timePos: string;
+}) {
   const tags = useAppSelector(selectTags);
   const gridTemplateRows = events.map(() => "1fr").join(" ");
 
@@ -12,10 +18,10 @@ export default function TimelineFraction({ events }: { events: Event[] }) {
   const [visible, setVisible] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
+    const x: number = e.clientX - rect.left;
 
     setPos({
       x: rect.left + x - (tooltipRef.current?.offsetWidth || 0) / 2,
@@ -45,21 +51,20 @@ export default function TimelineFraction({ events }: { events: Event[] }) {
           );
         })}
       </div>
-      {events.length != 0 ? (
-        <div
-          ref={tooltipRef}
-          className="fixed pointer-events-none p-2 bg-neutral-100 text-neutral-900 shadow-lg shadow-[rgba(0,0,0,0.50)] rounded-sm"
-          style={{
-            left: pos.x,
-            top: pos.y,
-            opacity: visible ? 1 : 0,
-          }}
-        >
-          {events.map((e, i) => {
-            return <div key={i}>{e.description}</div>;
-          })}
-        </div>
-      ) : null}
+      <div
+        ref={tooltipRef}
+        className="fixed pointer-events-none p-2 bg-neutral-100 text-neutral-900 shadow-lg shadow-[rgba(0,0,0,0.50)] rounded-sm"
+        style={{
+          left: pos.x,
+          top: pos.y,
+          opacity: visible ? 1 : 0,
+        }}
+      >
+        {events.map((e, i) => {
+          return <div key={i}>{e.description}</div>;
+        })}
+        <span className="font-light">{timePos}</span>
+      </div>
     </div>
   );
 }
